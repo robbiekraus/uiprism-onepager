@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UIPrism – Deck (Low-Fi)</title>
+<link rel="icon" type="image/svg+xml" href="Brand/UIPrism-Logos/svg/UIPrism-Favicon.svg">
+<style>
+  :root{
+    --bg:#FAFAF9; --ink:#141418; --sub:#5B5B66; --accent:#6366F1;
+    --line:#ECEAE6; --darkbg:#0E0E11; --card:#F2F1ED;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;background:#e7e5df;
+    font-family:'Inter','Helvetica Neue',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+    color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .viewport{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .slide{
+    display:none;flex-direction:column;justify-content:center;
+    width:min(94vw,167vh);aspect-ratio:16/9;background:var(--bg);
+    border-radius:14px;box-shadow:0 24px 70px rgba(20,20,28,.16);
+    padding:7% 8%;position:relative;
+    font-size:clamp(12px,1.5vw,26px);
+  }
+  .slide.active{display:flex;}
+  .slide.dark{background:var(--darkbg);color:#fff;}
+  .slide.dark .sub{color:#B9B9C4;}
+  .slide.dark .kicker{color:#A9A2FF;}
+  .slide.dark .beleg{color:#77737f;}
+
+  .kicker{font-size:0.58em;letter-spacing:2px;text-transform:uppercase;
+    color:var(--accent);font-weight:700;margin-bottom:1.1em;}
+  h1{font-size:2.05em;line-height:1.1;font-weight:800;letter-spacing:-0.02em;
+    max-width:17em;margin-bottom:0.7em;}
+  .sub{font-size:0.9em;line-height:1.5;color:var(--sub);max-width:31em;font-weight:400;}
+  .beleg{font-size:0.66em;line-height:1.45;color:#9A968C;max-width:31em;margin-top:1em;font-style:italic;}
+  .foot{position:absolute;left:8%;bottom:6.5%;font-size:0.72em;color:var(--sub);}
+  .foot b{color:var(--ink);font-weight:700;}
+  .slide.dark .foot b{color:#fff;}
+
+  #s0 h1{font-size:3.4em;margin-bottom:0.5em;}
+
+  .intro-row{display:flex;align-items:center;gap:1.4em;}
+  .avatar{width:4.4em;height:4.4em;border-radius:50%;object-fit:cover;flex-shrink:0;}
+
+  .visual{margin-top:1.4em;border:1.5px dashed #CFCcC4;border-radius:12px;
+    background:var(--card);color:#9A968C;font-size:0.72em;
+    padding:1.6em;display:flex;align-items:center;justify-content:center;
+    text-align:center;min-height:5.5em;max-width:34em;}
+
+  .flow{display:flex;align-items:center;gap:1em;margin-top:1.5em;flex-wrap:wrap;}
+  .chip{background:#fff;border:1px solid var(--line);border-radius:10px;
+    padding:0.7em 1.05em;font-size:0.72em;font-weight:700;box-shadow:0 3px 10px rgba(0,0,0,.04);}
+  .chip.acc{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .arrow{color:#C7C4BC;font-size:1.1em;font-weight:700;}
+
+  .result{margin-top:1.3em;display:flex;gap:2.2em;flex-wrap:wrap;}
+  .result .yes{color:#16A34A;font-weight:700;font-size:0.9em;}
+  .result .no{color:#DC2626;font-weight:700;font-size:0.9em;}
+
+  .qs{margin-top:1.2em;max-width:32em;}
+  .qs .q{font-size:0.86em;color:var(--sub);margin-bottom:0.55em;line-height:1.45;}
+  .qs .q b{color:var(--ink);}
+  .links{display:flex;gap:0.7em;flex-wrap:wrap;margin-top:1.6em;}
+  .link{font-size:0.7em;font-weight:700;padding:0.55em 0.95em;border:1px solid var(--line);
+    border-radius:999px;color:var(--sub);text-decoration:none;background:#fff;}
+  .link.active{color:var(--accent);border-color:var(--accent);}
+
+  .chrome{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;
+    justify-content:center;gap:1em;padding:0.9em 0;z-index:50;}
+  .navbtn{background:#fff;border:1px solid #DedCd6;width:2.3em;height:2.3em;border-radius:50%;
+    font-size:1em;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);}
+  .navbtn:hover{background:#f0eee9;}
+  .dots{display:flex;gap:0.35em;flex-wrap:wrap;max-width:44vw;justify-content:center;}
+  .dot{width:0.5em;height:0.5em;border-radius:50%;background:#CccabF;cursor:pointer;}
+  .dot.active{background:var(--accent);width:1.3em;border-radius:4px;}
+  .counter{font-size:0.78em;color:#6b6878;min-width:3.4em;text-align:center;font-family:ui-monospace,monospace;}
+  .fsbtn{position:fixed;top:1em;right:1em;background:#fff;border:1px solid #DedCd6;width:2.1em;height:2.1em;
+    border-radius:50%;cursor:pointer;z-index:60;font-size:0.85em;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+
+  /* feines Branding auf dunklen Slides */
+  .brandmark{position:absolute;top:6.5%;right:7%;height:1.9em;width:auto;opacity:.9;}
+  /* echter App-Screenshot */
+  .shot{margin-top:1.3em;max-width:34em;width:100%;border-radius:10px;
+    border:1px solid var(--line);box-shadow:0 12px 34px rgba(20,20,28,.14);display:block;}
+  .shot-cap{font-size:0.6em;color:#9A968C;margin-top:0.6em;font-style:italic;}
+  /* Hero-Visual (Fragment-Labyrinth) */
+  .hero-svg{margin-top:1.15em;max-width:35em;width:100%;}
+  .hero-svg svg{width:100%;height:auto;display:block;}
+  .hero-cap{font-size:0.6em;color:#9A968C;margin-top:0.55em;font-style:italic;}
+  /* Zwei-Screenshot-Galerie */
+  .shots{margin-top:1.15em;display:flex;gap:0.8em;max-width:36em;width:100%;}
+  .shots figure{flex:1;margin:0;}
+  .shots img{width:100%;height:auto;border-radius:8px;border:1px solid var(--line);
+    box-shadow:0 10px 28px rgba(20,20,28,.13);display:block;}
+  .shots figcaption{font-size:0.56em;color:#9A968C;margin-top:0.45em;font-style:italic;text-align:center;}
+</style>
+</head>
+<body>
+<div class="viewport">
+
+  <!-- 0 TITLE -->
+  <div class="slide active" data-menu="Titel">
+    <div class="kicker">Vibe Coding Bootcamp · Finaler Check-In</div>
+    <img src="Brand/UIPrism-Logos/svg/UIPrism-Logo-Primary.svg" alt="UIPrism" style="width:min(64%,460px);height:auto;display:block;margin:0.1em 0 0.5em -6px;">
+    <div class="sub" style="font-size:1.05em;color:var(--ink);font-weight:600;">Map your UI, automatically.</div>
+    <div class="sub" style="margin-top:0.5em;">Ein Tool, das Wireframes, Screenshots, URLs und Repositories in ein konsistentes Designsystem übersetzt — gebaut mit KI.</div>
+    <div class="foot"><b>Robert Kraus</b> · UX/UI Designer</div>
+  </div>
+
+  <!-- 1 VORSTELLUNG -->
+  <div class="slide" data-menu="Vorstellung">
+    <div class="kicker">00 · Vorstellung</div>
+    <div class="intro-row">
+      <img class="avatar" src="robbie-portrait.jpg" alt="Robert Kraus">
+      <div>
+        <h1 style="margin-bottom:0.35em;">Designer. Kein Coder.</h1>
+        <div class="sub">Senior UX/UI Designer &amp; UX Design Consultant. SaaS, Cloud-Services, Automotive, Medical Devices, Web. Kann Code oberflächlich lesen, aber nicht schreiben.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 AUSGANGSLAGE: PROMPT + POST-ITS -->
+  <div class="slide" data-menu="Ausgangslage · Prompt & Post-its">
+    <div class="kicker">01 · Ausgangslage</div>
+    <h1>Software aus dem Prompt — zusammengehalten von Post-its.</h1>
+    <div class="sub">KI-generierte Dashboard-Entwürfe, mit Post-its erklärt und ohne Designsystem gebaut — jede Seite sah anders aus.</div>
+  </div>
+
+  <!-- 3 WILDWUCHS -->
+  <div class="slide" data-menu="Ausgangslage · Wildwuchs">
+    <div class="kicker">01 · Ausgangslage</div>
+    <h1>Aus Tempo wird ein Fragment-Labyrinth.</h1>
+    <div class="sub">Man startet mit einer kleinen Vision — und Feature um Feature bleibt haften, bis ein Gebäude entsteht, in dem sich niemand mehr zurechtfindet. Kein System, keine Konsistenz.</div>
+    <div class="hero-svg">
+      <svg viewBox="0 0 720 214" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fragment-Labyrinth: mismatched UI-Fragmente türmen sich zu einem unübersichtlichen Klumpen.">
+        <!-- Labyrinth-Silhouette (Gebäude) hinter dem Klumpen -->
+        <g fill="none" stroke="#EAE8E2" stroke-width="2">
+          <rect x="356" y="34" width="300" height="150" rx="10"/>
+          <rect x="382" y="58" width="248" height="102" rx="8"/>
+          <rect x="408" y="82" width="196" height="54" rx="6"/>
+          <path d="M356 109 H408 M604 109 H656 M506 34 V58 M506 136 V184"/>
+        </g>
+        <!-- „Vision"-Pfad, der sich im Klumpen verliert -->
+        <path d="M150 118 C214 118 226 156 300 156 C340 156 360 140 388 132"
+              fill="none" stroke="#CFCCC4" stroke-width="2" stroke-dasharray="5 6" stroke-linecap="round"/>
+
+        <!-- Tile-Helfer: Rechteck + Header-Bar + 2 Zeilen -->
+        <!-- A · die kleine, saubere Vision (aufrecht, links) -->
+        <g transform="translate(24,60)">
+          <rect width="120" height="94" rx="9" fill="#FFFFFF" stroke="#E0DED7" stroke-width="1.5"/>
+          <rect x="12" y="13" width="70" height="9" rx="4" fill="#6366F1"/>
+          <rect x="12" y="34" width="96" height="6" rx="3" fill="#E8E6DF"/>
+          <rect x="12" y="48" width="80" height="6" rx="3" fill="#E8E6DF"/>
+          <rect x="12" y="62" width="88" height="6" rx="3" fill="#E8E6DF"/>
+        </g>
+        <!-- B -->
+        <g transform="translate(252,38) rotate(-9)">
+          <rect width="122" height="92" rx="9" fill="#FFFFFF" stroke="#E0DED7" stroke-width="1.5"/>
+          <rect x="12" y="13" width="66" height="9" rx="4" fill="#06B6D4"/>
+          <rect x="12" y="34" width="94" height="6" rx="3" fill="#E8E6DF"/>
+          <rect x="12" y="48" width="72" height="6" rx="3" fill="#E8E6DF"/>
+        </g>
+        <!-- C -->
+        <g transform="translate(320,104) rotate(12)">
+          <rect width="106" height="80" rx="9" fill="#F4F3EF" stroke="#E0DED7" stroke-width="1.5"/>
+          <rect x="11" y="12" width="58" height="9" rx="4" fill="#F59E0B"/>
+          <rect x="11" y="32" width="82" height="6" rx="3" fill="#E8E6DF"/>
+          <rect x="11" y="45" width="64" height="6" rx="3" fill="#E8E6DF"/>
+        </g>
+        <!-- D -->
+        <g transform="translate(408,30) rotate(6)">
+          <rect width="128" height="98" rx="9" fill="#FFFFFF" stroke="#E0DED7" stroke-width="1.5"/>
+          <rect x="13" y="14" width="74" height="9" rx="4" fill="#E3E1DA"/>
+          <rect x="13" y="36" width="100" height="6" rx="3" fill="#E8E6DF"/>
+          <rect x="13" y="50" width="84" height="6" rx="3" fill="#E8E6DF"/>
+          <rect x="13" y="64" width="92" height="6" rx="3" fill="#E8E6DF"/>
+        </g>
+        <!-- E -->
+        <g transform="translate(474,86) rotate(-15)">
+          <rect width="104" height="82" rx="9" fill="#FFFFFF" stroke="#E0DED7" stroke-width="1.5"/>
+          <rect x="11" y="12" width="56" height="9" rx="4" fill="#10B981"/>
+          <rect x="11" y="33" width="80" height="6" rx="3" fill="#E8E6DF"/>
+          <rect x="11" y="47" width="60" height="6" rx="3" fill="#E8E6DF"/>
+        </g>
+        <!-- F -->
+        <g transform="translate(548,44) rotate(17)">
+          <rect width="116" height="90" rx="9" fill="#F4F3EF" stroke="#E0DED7" stroke-width="1.5"/>
+          <rect x="12" y="13" width="62" height="9" rx="4" fill="#EC4899"/>
+          <rect x="12" y="34" width="90" height="6" rx="3" fill="#E8E6DF"/>
+          <rect x="12" y="48" width="70" height="6" rx="3" fill="#E8E6DF"/>
+        </g>
+        <!-- G · kleines Fragment, das oben aufliegt -->
+        <g transform="translate(360,132) rotate(-7)">
+          <rect width="84" height="60" rx="8" fill="#FFFFFF" stroke="#E0DED7" stroke-width="1.5"/>
+          <rect x="10" y="11" width="46" height="8" rx="4" fill="#6366F1"/>
+          <rect x="10" y="29" width="62" height="5" rx="2.5" fill="#E8E6DF"/>
+        </g>
+      </svg>
+    </div>
+    <div class="hero-cap">Aus einer kleinen Vision (links) wird ein Klumpen mismatched Fragmente — kein System, keine Konsistenz.</div>
+  </div>
+
+  <!-- 4 AUSLÖSER (dark) -->
+  <div class="slide dark" data-menu="Der Auslöser">
+    <img class="brandmark" src="Brand/UIPrism-Logos/svg/UIPrism-Mark-White.svg" alt="UIPrism">
+    <div class="kicker">02 · Der Auslöser</div>
+    <h1>„In 3 Monaten macht das die KI."</h1>
+    <div class="sub">Die Ansage der Geschäftsführung: 50 Entwicklerstellen, Designer und Coder bald überflüssig — Features promptet man selbst. Datenschutz und Sicherheit? Für die GF ein Randthema.</div>
+  </div>
+
+  <!-- 5 REAKTION -->
+  <div class="slide" data-menu="Die Reaktion">
+    <div class="kicker">03 · Die Reaktion</div>
+    <h1>Aufräumen bei laufendem Betrieb.</h1>
+    <div class="sub">Zwei Aufgaben zugleich: fünf Jahre Wildwuchs bändigen und den KI-Input auf ein konsistentes Designsystem bringen. Daraus wurde UIPrism.</div>
+  </div>
+
+  <!-- 6 IDEE -->
+  <div class="slide" data-menu="Die Idee">
+    <div class="kicker">04 · Die Idee</div>
+    <h1>Wireframe rein — konsistentes Design raus.</h1>
+    <div class="sub">Liest Screenshots, Wireframes und Repositories, nutzt das Repo als Single Source of Truth und synct nach Figma.</div>
+    <div class="flow">
+      <span class="chip">Screenshot · Wireframe · Repo</span>
+      <span class="arrow">→</span>
+      <span class="chip acc">UIPrism</span>
+      <span class="arrow">→</span>
+      <span class="chip">Figma-Designsystem</span>
+    </div>
+    <div class="shots">
+      <figure>
+        <img src="Screenshots/uiprism-app-dashboard-crop.jpg" alt="UIPrism – Dashboard-Ansicht des Live-Prototyps">
+        <figcaption>Dashboard: Quellen einlesen &amp; verwalten</figcaption>
+      </figure>
+      <figure>
+        <img src="Screenshots/uiprism-app-tokens-crop.jpg" alt="UIPrism – automatisch extrahierte Design-Tokens (Farben, Typografie)">
+        <figcaption>Tokens: Farbe, Typo &amp; Spacing automatisch extrahiert</figcaption>
+      </figure>
+    </div>
+    <div class="shot-cap" style="margin-top:0.6em;">Live-Prototyp: von der eingelesenen Quelle zum konsistenten Token-Set.</div>
+  </div>
+
+  <!-- 7 HYPOTHESE -->
+  <div class="slide" data-menu="Hypothese & Ergebnis">
+    <div class="kicker">05 · Hypothese & Ergebnis</div>
+    <h1>Die Wette: ohne eine Zeile Code baubar.</h1>
+    <div class="result">
+      <div><span class="yes">Als Prototyp — ja.</span></div>
+      <div><span class="no">Als wartbares Produkt — nein.</span></div>
+    </div>
+    <div class="sub" style="margin-top:1.2em;">Mein Denkwandel: Es lag nicht an der Idee, sondern an der Übergabe an mich. Mit KI entsteht schnell Beeindruckendes — aber ohne Code-Verständnis bleibt es fremdgesteuert.</div>
+  </div>
+
+  <!-- 8 JOURNEY 1/2 -->
+  <div class="slide" data-menu="Journey · Was ich weggelassen habe">
+    <div class="kicker">06 · Die Journey (1/2)</div>
+    <h1>Kein Terminal. Alles über die KI.</h1>
+    <div class="sub">Bewusst weggelassen, was mich überfordert — Terminal und klassische Dev-Tools. Stattdessen alles über Claude &amp; Claude Code, per MCP an Miro, GitHub und Figma angebunden. Automatisiert, was ging.</div>
+  </div>
+
+  <!-- 9 JOURNEY 2/2 -->
+  <div class="slide" data-menu="Journey · Der Preis">
+    <div class="kicker">06 · Die Journey (2/2)</div>
+    <h1>Alles automatisiert — der Preis ist Blindflug.</h1>
+    <div class="sub">Der Entwicklungsprozess liegt komplett bei der KI, ich greife kaum ein. Schnelle Ergebnisse, aber intransparent: unzählige Iterationen, unklare Fehler — und mein eigener Lernfaktor bleibt gering. Genau daher meine Unruhe.</div>
+  </div>
+
+  <!-- 9 THESE (dark) -->
+  <div class="slide dark" data-menu="★ These: Bauen mit KI">
+    <img class="brandmark" src="Brand/UIPrism-Logos/svg/UIPrism-Mark-White.svg" alt="UIPrism">
+    <div class="kicker">07 · Bauen mit KI · ★ Herzstück</div>
+    <h1>Chat ist das falsche Interface für Designer.</h1>
+    <div class="sub">Design-Denken ist visuell und geht in die Breite — Wireframes, Pläne, zunehmende Detailtiefe. Ein Textchat erzwingt eine lineare Abfolge. Genau da liegt der Bruch.</div>
+    <div class="beleg">Damit nicht allein: Amelia Wattenberger (GitHub Next) &amp; Nielsen Norman Group argumentieren dasselbe. Es geht um Interface-Passung — nicht darum, dass KI für Designer „unmöglich" wäre.</div>
+  </div>
+
+  <!-- 10 VISION -->
+  <div class="slide" data-menu="Vision & Next Steps">
+    <div class="kicker">08 · Vision & Next Steps</div>
+    <h1>Die Idee trägt. Die Umsetzung braucht Code-Tiefe.</h1>
+    <div class="sub">Nächster Schritt evtl. Übergabe an Entwickler-Hand; Weg: klein testen → Open Source → bottom-up → Enterprise.</div>
+  </div>
+
+  <!-- 11 Q&A -->
+  <div class="slide" data-menu="Q&A">
+    <div class="kicker">Q&A</div>
+    <h1>Fragen?</h1>
+    <div class="qs">
+      <div class="q"><b>1.</b> Wie erlebt ihr das Gefühl, dass die KI schneller baut, als ihr folgen könnt?</div>
+      <div class="q"><b>2.</b> Würdet ihr ein KI-Projekt je an jemanden mit Code-Skills abgeben — oder nie aus der Hand?</div>
+    </div>
+    <div class="links">
+      <a class="link" data-link="live" href="#" target="_blank">Live</a>
+      <a class="link" data-link="repo" href="#" target="_blank">Repo</a>
+      <a class="link" data-link="onepager" href="#" target="_blank">One-Pager</a>
+      <a class="link" data-link="linkedin" href="#" target="_blank">LinkedIn</a>
+    </div>
+    <div class="foot">Danke fürs Zuhören.</div>
+  </div>
+
+</div>
+
+<button class="fsbtn" id="fsBtn" title="Vollbild">⛶</button>
+<div class="chrome">
+  <button class="navbtn" id="prevBtn">‹</button>
+  <div class="dots" id="dots"></div>
+  <button class="navbtn" id="nextBtn">›</button>
+  <span class="counter" id="counter"></span>
+</div>
+
+<script>
+  const LINKS = {
+    live: "https://designbridge-production.up.railway.app/",
+    repo: "https://github.com/robbiekraus/designbridge",
+    onepager: "https://uiprism.netlify.app",
+    linkedin: "https://www.linkedin.com/in/robert-kraus-uxuidesign/"
+  };
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let idx = 0;
+  function applyLinks(){
+    document.querySelectorAll('[data-link]').forEach(el=>{
+      const url = LINKS[el.getAttribute('data-link')];
+      if(url){ el.href=url; el.classList.add('active'); }
+      else { el.removeAttribute('href'); el.style.opacity=.45; }
+    });
+  }
+  function build(){
+    const d=document.getElementById('dots');
+    slides.forEach((s,i)=>{
+      const dot=document.createElement('div');dot.className='dot';
+      dot.addEventListener('click',()=>show(i));d.appendChild(dot);
+    });
+  }
+  function show(i){
+    idx=Math.max(0,Math.min(slides.length-1,i));
+    slides.forEach((s,j)=>s.classList.toggle('active',j===idx));
+    document.querySelectorAll('.dot').forEach((d,j)=>d.classList.toggle('active',j===idx));
+    document.getElementById('counter').textContent=(idx+1)+' / '+slides.length;
+  }
+  document.getElementById('prevBtn').addEventListener('click',()=>show(idx-1));
+  document.getElementById('nextBtn').addEventListener('click',()=>show(idx+1));
+  document.getElementById('fsBtn').addEventListener('click',()=>{
+    if(!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  });
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight',' ','PageDown'].includes(e.key)) show(idx+1);
+    else if(['ArrowLeft','PageUp'].includes(e.key)) show(idx-1);
+  });
+  build();applyLinks();show(0);
+</script>
+</body>
+</html>

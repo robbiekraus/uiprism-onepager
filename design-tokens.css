@@ -1,0 +1,53 @@
+/* =========================================================
+   UIPrism — Design Tokens (Richtung A · „Clarity")
+   Quelle: uiprism-brand.md · verbindliche Farb-/Typo-Regeln.
+   Diese Tokens sind die Single Source of Truth für das
+   UIPrism-EIGENE Branding (App-Chrome, Deck, One-Pager).
+   NICHT zu verwechseln mit den Tokens, die die App aus
+   fremden Quellen extrahiert.
+   ========================================================= */
+
+:root {
+  /* --- Kernfarben --- */
+  --uip-ink:              #141418; /* Text / Wortmarke „UI" */
+  --uip-text-secondary:   #5B5B66; /* Sekundärtext */
+  --uip-primary:          #6366F1; /* Indigo — trägt die Marke, Primäraktionen */
+  --uip-bg:               #FAFAF9; /* Heller Hintergrund */
+  --uip-statement-dark:   #0E0E11; /* Dunkle Statement-Flächen */
+  --uip-surface:          #FFFFFF;
+  --uip-line:             #ECEAE6; /* Hairline / Border */
+
+  /* --- Indigo-Skala (aus Primär abgeleitet) --- */
+  --uip-primary-hover:    #4F52E0;
+  --uip-primary-soft:     #EFECFF; /* Badge-/Chip-Hintergrund */
+  --uip-primary-ink:      #4A3AD1; /* Text auf primary-soft */
+
+  /* --- Spektrum (NUR sparsam: Logo + 1 Hairline + evtl. Dots) --- */
+  --uip-spectrum-indigo:  #6366F1;
+  --uip-spectrum-cyan:    #06B6D4;
+  --uip-spectrum-green:   #10B981;
+  --uip-spectrum-amber:   #F59E0B;
+  --uip-spectrum-pink:    #EC4899;
+  --uip-spectrum-gradient: linear-gradient(90deg,#6366F1,#06B6D4,#10B981,#F59E0B,#EC4899);
+
+  /* --- Typografie --- */
+  --uip-font-sans: 'Inter','Helvetica Neue',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+  --uip-weight-body:   400;
+  --uip-weight-strong: 600;
+  --uip-weight-head:   800;
+  --uip-tracking-head: -0.02em; /* enges Tracking auf großen Headlines */
+
+  /* --- Radius / Elevation (leichtgewichtig) --- */
+  --uip-radius-sm: 8px;
+  --uip-radius-md: 12px;
+  --uip-radius-pill: 999px;
+  --uip-shadow-card: 0 12px 34px rgba(20,20,28,.14);
+}
+
+/*
+  REGEL (verbindlich):
+  - Indigo (--uip-primary) trägt die Marke: Primärbuttons, aktive States, Akzente.
+  - Das VOLLE Spektrum wird nur sparsam eingesetzt (Logo, eine feine Trennlinie,
+    optional Progress-Dots) — nie flächig, damit es edel bleibt.
+  - Auf dunklen Flächen: Wortmarke weiß, Spektrum bleibt farbig.
+*/
