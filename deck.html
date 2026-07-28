@@ -87,7 +87,7 @@
   <div style="background:#FBFBF9;color:#141418;padding:70px 86px 54px;display:flex;flex-direction:column;justify-content:space-between">
     <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9A9A93">Also habe ich es ausprobiert</span>
     <div style="flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:flex-start;padding-top:150px;gap:24px">
-      <h2 data-punch="" style="animation-delay:1.3s;font-weight:800;letter-spacing:-0.03em;line-height:1.04;font-size:58px;margin:0">Bauen<br>im Blindflug</h2>
+      <h2 data-punch="" style="animation-delay:1.3s;font-weight:800;letter-spacing:-0.03em;line-height:1.04;font-size:58px;margin:0">Bauen<br><span style="color:#6366F1">im Blindflug</span></h2>
       <p style="animation-delay:1.6s;font-size:23px;line-height:1.5;color:#6B6B64;max-width:34em">Fünf Wochen lang habe ich ein echtes Tool gebaut — ohne Terminal, ohne eine Zeile eigenen Code. Wie weit kommt ein Designer, wenn die KI alles baut?</p>
     </div>
     <div style="flex:none;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #E8E6E0;padding-top:19px;margin-top:26px;font-size:13px;color:#9A9A93">
@@ -392,10 +392,42 @@
 </section>
 
 <section data-label="Danke" data-speaker-notes="Schluss. Kurz stehen lassen, lächeln, fertig." style="background:#FBFBF9;color:#141418;padding:70px 134px 54px;display:flex;flex-direction:column">
-  <div style="flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:30px">
+  <div style="flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center">
+  <div style="display:flex;flex-direction:column;gap:30px">
     <p style="font-size:15px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#6366F1;margin:0;display:flex;align-items:center;gap:14px"><span style="display:inline-block;width:34px;height:2px;background:#6366F1"></span>Ding-dong · Borddurchsage</p>
-    <h1 data-punch="" style="font-weight:800;letter-spacing:-0.03em;line-height:1.12;font-size:48px;margin:0">„Hier spricht Ihr Pilot, Claude.<br><span style="color:#6366F1">Danke, dass Sie mit uns geflogen sind.“</span></h1>
+    <h1 data-punch="" style="font-weight:800;letter-spacing:-0.03em;line-height:1.12;font-size:48px;margin:0"><span style="color:#6366F1">„Hier spricht Ihr Pilot, Claude.</span><br>Danke, dass Sie blind mit uns geflogen sind.“</h1>
     <p style="animation-delay:.9s;font-size:23px;line-height:1.5;color:#6B6B64;max-width:36em;margin:0">Die Sicht war die ganze Zeit hervorragend — für mich. Bitte bleiben Sie angeschnallt, wir bauen weiter.</p>
+  </div>
+  <svg data-punch="" width="440" height="300" viewBox="0 0 440 300" style="animation-delay:.6s;display:block;justify-self:center;overflow:visible">
+    <defs>
+      <linearGradient id="maskBody" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#818CF8"></stop>
+        <stop offset=".55" stop-color="#6366F1"></stop>
+        <stop offset="1" stop-color="#4A3AD1"></stop>
+      </linearGradient>
+      <linearGradient id="maskSheen" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="rgba(255,255,255,.55)"></stop>
+        <stop offset="1" stop-color="rgba(255,255,255,0)"></stop>
+      </linearGradient>
+    </defs>
+    <ellipse cx="220" cy="272" rx="150" ry="16" fill="rgba(28,26,74,.12)"></ellipse>
+    <g fill="#141418" font-family="Inter,Arial,sans-serif" font-weight="800">
+      <text data-pop="" style="animation-delay:1.2s" x="256" y="-6" font-size="34">z</text>
+      <text data-pop="" style="animation-delay:1.5s" x="288" y="-34" font-size="48">Z</text>
+      <text data-pop="" style="animation-delay:1.8s" x="334" y="-68" font-size="64">Z</text>
+    </g>
+    <g fill="#A5B4FC">
+      <path d="M368 60 Q412 22 428 44 Q440 62 396 84 Q380 90 372 80 Z"></path>
+      <path d="M368 92 Q416 108 404 132 Q392 152 362 116 Q354 104 362 96 Z"></path>
+      <path d="M400 84 Q436 130 420 168 L402 158 Q416 124 392 96 Z"></path>
+    </g>
+    <circle cx="368" cy="80" r="14" fill="#818CF8"></circle>
+    <path d="M42 110 Q10 70 60 40 Q120 8 220 8 Q320 8 366 66" fill="none" stroke="#A5B4FC" stroke-width="12" stroke-linecap="round"></path>
+    <path d="M40 100 Q220 46 400 100 Q422 162 392 212 Q340 266 258 252 Q230 247 220 222 Q210 247 182 252 Q100 266 48 212 Q18 162 40 100 Z" fill="url(#maskBody)"></path>
+    <path d="M40 100 Q220 46 400 100 Q422 162 392 212 Q340 266 258 252 Q230 247 220 222 Q210 247 182 252 Q100 266 48 212 Q18 162 40 100 Z" fill="none" stroke="#4A3AD1" stroke-width="5"></path>
+    <path d="M62 118 Q220 70 378 118 Q390 148 380 172 Q340 158 220 158 Q100 158 60 172 Q50 148 62 118 Z" fill="url(#maskSheen)"></path>
+    <path d="M88 210 Q150 232 220 224" fill="none" stroke="rgba(28,26,74,.25)" stroke-width="7" stroke-linecap="round"></path>
+  </svg>
   </div>
   <div style="flex:none;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #E8E6E0;padding-top:19px;margin-top:26px;font-size:13px;color:#9A9A93">
     <span>Robert Kraus · Senior UX/UI Designer</span><span style="font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#4A3AD1">UIPrism</span>
