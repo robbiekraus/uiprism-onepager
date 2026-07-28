@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UIPrism – Deck (Low-Fi)</title>
+<link rel="icon" type="image/svg+xml" href="Brand/UIPrism-Logos/svg/UIPrism-Favicon.svg">
+<style>
+  :root{
+    --bg:#FAFAF9; --ink:#141418; --sub:#5B5B66; --accent:#6366F1;
+    --line:#ECEAE6; --darkbg:#0E0E11; --card:#F2F1ED;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;background:#e7e5df;
+    font-family:'Inter','Helvetica Neue',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+    color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .viewport{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .slide{
+    display:none;flex-direction:column;justify-content:center;
+    width:min(94vw,167vh);aspect-ratio:16/9;background:var(--bg);
+    border-radius:14px;box-shadow:0 24px 70px rgba(20,20,28,.16);
+    padding:7% 8%;position:relative;
+    font-size:clamp(12px,1.5vw,26px);
+  }
+  .slide.active{display:flex;}
+  .slide.dark{background:var(--darkbg);color:#fff;}
+  .slide.dark .sub{color:#B9B9C4;}
+  .slide.dark .kicker{color:#A9A2FF;}
+  .slide.dark .beleg{color:#77737f;}
+
+  .kicker{font-size:0.58em;letter-spacing:2px;text-transform:uppercase;
+    color:var(--accent);font-weight:700;margin-bottom:1.1em;}
+  h1{font-size:2.05em;line-height:1.1;font-weight:800;letter-spacing:-0.02em;
+    max-width:17em;margin-bottom:0.7em;}
+  .sub{font-size:0.9em;line-height:1.5;color:var(--sub);max-width:31em;font-weight:400;}
+  .beleg{font-size:0.66em;line-height:1.45;color:#9A968C;max-width:31em;margin-top:1em;font-style:italic;}
+  .foot{position:absolute;left:8%;bottom:6.5%;font-size:0.72em;color:var(--sub);}
+  .foot b{color:var(--ink);font-weight:700;}
+  .slide.dark .foot b{color:#fff;}
+
+  #s0 h1{font-size:3.4em;margin-bottom:0.5em;}
+
+  .intro-row{display:flex;align-items:center;gap:1.4em;}
+  .avatar{width:4.4em;height:4.4em;border-radius:50%;object-fit:cover;flex-shrink:0;}
+
+  .visual{margin-top:1.4em;border:1.5px dashed #CFCcC4;border-radius:12px;
+    background:var(--card);color:#9A968C;font-size:0.72em;
+    padding:1.6em;display:flex;align-items:center;justify-content:center;
+    text-align:center;min-height:5.5em;max-width:34em;}
+
+  .flow{display:flex;align-items:center;gap:1em;margin-top:1.5em;flex-wrap:wrap;}
+  .chip{background:#fff;border:1px solid var(--line);border-radius:10px;
+    padding:0.7em 1.05em;font-size:0.72em;font-weight:700;box-shadow:0 3px 10px rgba(0,0,0,.04);}
+  .chip.acc{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .arrow{color:#C7C4BC;font-size:1.1em;font-weight:700;}
+
+  .result{margin-top:1.3em;display:flex;gap:2.2em;flex-wrap:wrap;}
+  .result .yes{color:#16A34A;font-weight:700;font-size:0.9em;}
+  .result .no{color:#DC2626;font-weight:700;font-size:0.9em;}
+
+  .qs{margin-top:1.2em;max-width:32em;}
+  .qs .q{font-size:0.86em;color:var(--sub);margin-bottom:0.55em;line-height:1.45;}
+  .qs .q b{color:var(--ink);}
+  .links{display:flex;gap:0.7em;flex-wrap:wrap;margin-top:1.6em;}
+  .link{font-size:0.7em;font-weight:700;padding:0.55em 0.95em;border:1px solid var(--line);
+    border-radius:999px;color:var(--sub);text-decoration:none;background:#fff;}
+  .link.active{color:var(--accent);border-color:var(--accent);}
+
+  .chrome{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;
+    justify-content:center;gap:1em;padding:0.9em 0;z-index:50;}
+  .navbtn{background:#fff;border:1px solid #DedCd6;width:2.3em;height:2.3em;border-radius:50%;
+    font-size:1em;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);}
+  .navbtn:hover{background:#f0eee9;}
+  .dots{display:flex;gap:0.35em;flex-wrap:wrap;max-width:44vw;justify-content:center;}
+  .dot{width:0.5em;height:0.5em;border-radius:50%;background:#CccabF;cursor:pointer;}
+  .dot.active{background:var(--accent);width:1.3em;border-radius:4px;}
+  .counter{font-size:0.78em;color:#6b6878;min-width:3.4em;text-align:center;font-family:ui-monospace,monospace;}
+  .fsbtn{position:fixed;top:1em;right:1em;background:#fff;border:1px solid #DedCd6;width:2.1em;height:2.1em;
+    border-radius:50%;cursor:pointer;z-index:60;font-size:0.85em;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+
+  /* feines Branding auf dunklen Slides */
+  .brandmark{position:absolute;top:6.5%;right:7%;height:1.9em;width:auto;opacity:.9;}
+  /* echter App-Screenshot */
+  .shot{margin-top:1.3em;max-width:34em;width:100%;border-radius:10px;
+    border:1px solid var(--line);box-shadow:0 12px 34px rgba(20,20,28,.14);display:block;}
+  .shot-cap{font-size:0.6em;color:#9A968C;margin-top:0.6em;font-style:italic;}
+  /* Hero-Visual (Fragment-Labyrinth) */
+  .hero-svg{margin-top:1.15em;max-width:35em;width:100%;}
+  .hero-svg svg{width:100%;height:auto;display:block;}
+  .hero-cap{font-size:0.6em;color:#9A968C;margin-top:0.55em;font-style:italic;}
+  /* Zwei-Screenshot-Galerie */
+  .shots{margin-top:1.15em;display:flex;gap:0.8em;max-width:36em;width:100%;}
+  .shots figure{flex:1;margin:0;}
+  .shots img{width:100%;height:auto;border-radius:8px;border:1px solid var(--line);
+    box-shadow:0 10px 28px rgba(20,20,28,.13);display:block;}
+  .shots figcaption{font-size:0.56em;color:#9A968C;margin-top:0.45em;font-style:italic;text-align:center;}
+
+  /* Slide „Wildwuchs" — Katamari-Klick-Animation (ersetzt das statische Labyrinth-SVG) */
+  .kat-stage{position:relative;margin-top:1.05em;max-width:22em;width:100%;
+    background:#FAFAF9;border:1px solid var(--line);border-radius:14px;
+    aspect-ratio:16/9;overflow:hidden;cursor:pointer;}
+  .kat-stage svg{position:absolute;inset:0;width:100%;height:100%;display:block;}
+  .kat-cap{position:absolute;left:0.9em;top:0.75em;z-index:3;pointer-events:none;
+    font-size:0.72em;font-weight:700;color:#141418;max-width:62%;
+    opacity:0;transition:opacity .32s ease;}
+  .kat-cap.show{opacity:1;}
+  .kat-play{position:absolute;inset:0;z-index:4;display:flex;align-items:center;
+    justify-content:center;background:rgba(250,250,249,.55);transition:opacity .28s ease;}
+  .kat-play.hidden{opacity:0;pointer-events:none;}
+  .kat-btn{display:flex;align-items:center;gap:0.5em;background:#141418;color:#fff;
+    border-radius:999px;padding:0.5em 1em 0.5em 0.8em;font-size:0.66em;font-weight:700;
+    box-shadow:0 10px 30px rgba(20,20,28,.22);}
+  .kat-btn svg{width:0.7em;height:0.7em;}
+  .kat-replay{position:absolute;right:0.75em;bottom:0.6em;z-index:3;
+    font-family:ui-monospace,monospace;font-size:0.5em;color:#A8A49A;
+    background:rgba(250,250,249,.86);padding:0.3em 0.7em;border-radius:999px;
+    opacity:0;transition:opacity .3s ease;}
+  .kat-replay.show{opacity:1;}
+  .kat-progress{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:3;}
+  .kat-progress i{display:block;height:100%;width:0;background:#6366F1;opacity:.55;}
+</style>
+</head>
+<body>
+<div class="viewport">
+
+  <!-- 0 TITLE -->
+  <div class="slide active" data-menu="Titel">
+    <div class="kicker">Vibe Coding Bootcamp · Finaler Check-In</div>
+    <img src="Brand/UIPrism-Logos/svg/UIPrism-Logo-Primary.svg" alt="UIPrism" style="width:min(64%,460px);height:auto;display:block;margin:0.1em 0 0.5em -6px;">
+    <div class="sub" style="font-size:1.05em;color:var(--ink);font-weight:600;">Map your UI, automatically.</div>
+    <div class="sub" style="margin-top:0.5em;">Ein Tool, das Wireframes, Screenshots, URLs und Repositories in ein konsistentes Designsystem übersetzt — gebaut mit KI.</div>
+    <div class="foot"><b>Robert Kraus</b> · UX/UI Designer</div>
+  </div>
+
+  <!-- 1 VORSTELLUNG -->
+  <div class="slide" data-menu="Vorstellung">
+    <div class="kicker">00 · Vorstellung</div>
+    <div class="intro-row">
+      <img class="avatar" src="robbie-portrait.jpg" alt="Robert Kraus">
+      <div>
+        <h1 style="margin-bottom:0.35em;">Designer. Kein Coder.</h1>
+        <div class="sub">Senior UX/UI Designer &amp; UX Design Consultant. SaaS, Cloud-Services, Automotive, Medical Devices, Web. Kann Code oberflächlich lesen, aber nicht schreiben.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 AUSGANGSLAGE: PROMPT + POST-ITS -->
+  <div class="slide" data-menu="Ausgangslage · Prompt & Post-its">
+    <div class="kicker">01 · Ausgangslage</div>
+    <h1>Software aus dem Prompt — zusammengehalten von Post-its.</h1>
+    <div class="sub">KI-generierte Dashboard-Entwürfe, mit Post-its erklärt und ohne Designsystem gebaut — jede Seite sah anders aus.</div>
+    <div class="hero-svg">
+      <svg viewBox="0 0 720 212" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="Ein Dashboard-Entwurf, über und über mit gelben Klebezetteln beklebt: Anmerkungen zu Balken- und Tortendiagramm, zu KPI-Kacheln, ein Zettel mit einem dicken Kreuz.">
+        <!-- Dashboard-Rahmen -->
+        <g stroke="#141418" stroke-width="5" stroke-linejoin="round">
+          <rect x="44" y="20" width="432" height="176" rx="11" fill="#FFFFFF"/>
+          <path d="M44 50 H476" stroke-width="4"/>
+          <path d="M112 50 V196" stroke-width="4"/>
+        </g>
+        <!-- Fensterpunkte -->
+        <g fill="#DedCd6" stroke="#141418" stroke-width="2.4">
+          <circle cx="62" cy="35" r="4.5"/><circle cx="78" cy="35" r="4.5"/><circle cx="94" cy="35" r="4.5"/>
+        </g>
+        <!-- Sidebar -->
+        <rect x="47" y="53" width="62" height="140" fill="#F4F3EF"/>
+        <g fill="#DedCd6">
+          <rect x="57" y="66" width="42" height="7" rx="3.5"/>
+          <rect x="57" y="84" width="34" height="7" rx="3.5"/>
+          <rect x="57" y="102" width="38" height="7" rx="3.5"/>
+          <rect x="57" y="120" width="28" height="7" rx="3.5"/>
+        </g>
+        <!-- KPI-Kacheln -->
+        <g stroke="#141418" stroke-width="3.6" fill="#FFFFFF">
+          <rect x="126" y="64" width="98" height="42" rx="7"/>
+          <rect x="238" y="64" width="98" height="42" rx="7"/>
+        </g>
+        <g fill="#DedCd6">
+          <rect x="136" y="74" width="30" height="6" rx="3"/>
+          <rect x="248" y="74" width="30" height="6" rx="3"/>
+        </g>
+        <g fill="#141418">
+          <rect x="136" y="87" width="46" height="10" rx="3"/>
+          <rect x="248" y="87" width="38" height="10" rx="3"/>
+        </g>
+        <!-- Balkendiagramm -->
+        <g stroke="#141418" stroke-width="3.6">
+          <rect x="126" y="124" width="98" height="62" rx="7" fill="#FFFFFF"/>
+        </g>
+        <g fill="#6366F1">
+          <rect x="136" y="160" width="12" height="18" rx="2"/>
+          <rect x="153" y="148" width="12" height="30" rx="2"/>
+          <rect x="170" y="154" width="12" height="24" rx="2"/>
+          <rect x="187" y="138" width="12" height="40" rx="2"/>
+          <rect x="204" y="152" width="12" height="26" rx="2"/>
+        </g>
+        <!-- Tortendiagramm -->
+        <g stroke="#141418" stroke-width="3.6">
+          <rect x="238" y="124" width="98" height="62" rx="7" fill="#FFFFFF"/>
+          <circle cx="287" cy="155" r="22" fill="#06B6D4"/>
+          <path d="M287 155 L287 133 A22 22 0 0 1 306 166 Z" fill="#10B981"/>
+        </g>
+        <!-- rechte Spalte -->
+        <g stroke="#141418" stroke-width="3.6" fill="#FFFFFF">
+          <rect x="350" y="64" width="112" height="122" rx="7"/>
+        </g>
+        <g fill="#DedCd6">
+          <rect x="362" y="78" width="60" height="6" rx="3"/>
+          <rect x="362" y="94" width="84" height="6" rx="3"/>
+          <rect x="362" y="110" width="70" height="6" rx="3"/>
+          <rect x="362" y="126" width="80" height="6" rx="3"/>
+          <rect x="362" y="142" width="56" height="6" rx="3"/>
+        </g>
+
+        <!-- Klebezettel: Krakel statt Text, damit niemand mitliest statt zuzuhören -->
+        <g stroke="#141418" stroke-width="4" stroke-linejoin="round">
+          <!-- über der KPI-Kachel -->
+          <g transform="translate(148,52) rotate(-8)">
+            <rect width="60" height="56" rx="2" fill="#FAD976"/>
+            <g stroke="#8A7433" stroke-width="3" stroke-linecap="round" fill="none">
+              <path d="M10 18 q10 -5 20 0 t18 0"/>
+              <path d="M10 30 q12 -5 24 0"/>
+              <path d="M10 42 q8 -4 16 0"/>
+            </g>
+          </g>
+          <!-- neben der zweiten KPI -->
+          <g transform="translate(292,44) rotate(7)">
+            <rect width="58" height="54" rx="2" fill="#FAD976"/>
+            <g stroke="#8A7433" stroke-width="3" stroke-linecap="round" fill="none">
+              <path d="M10 18 q11 -5 22 0"/>
+              <path d="M10 30 q9 -4 18 0 t14 0"/>
+            </g>
+          </g>
+          <!-- auf dem Balkendiagramm: das hier ist falsch -->
+          <g transform="translate(174,132) rotate(-5)">
+            <rect width="58" height="54" rx="2" fill="#F7A8C4"/>
+            <path d="M17 17 L41 41 M41 17 L17 41" stroke="#8E2B50" stroke-width="6" stroke-linecap="round" fill="none"/>
+          </g>
+          <!-- am Tortendiagramm, mit Pfeil -->
+          <g transform="translate(300,142) rotate(9)">
+            <rect width="56" height="52" rx="2" fill="#9BE3F2"/>
+            <g stroke="#1C6A7A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+              <path d="M12 34 L40 16"/>
+              <path d="M40 16 L30 16 M40 16 L40 26"/>
+            </g>
+          </g>
+          <!-- ragt rechts aus dem Rahmen -->
+          <g transform="translate(444,88) rotate(-7)">
+            <rect width="60" height="56" rx="2" fill="#FAD976"/>
+            <g stroke="#8A7433" stroke-width="3" stroke-linecap="round" fill="none">
+              <path d="M10 18 q10 -5 20 0 t18 0"/>
+              <path d="M10 30 q12 -5 24 0"/>
+              <path d="M10 42 q14 -5 28 0"/>
+            </g>
+          </g>
+          <!-- über der Sidebar -->
+          <g transform="translate(74,140) rotate(6)">
+            <rect width="54" height="50" rx="2" fill="#FAD976"/>
+            <g stroke="#8A7433" stroke-width="3" stroke-linecap="round" fill="none">
+              <path d="M9 17 q10 -4 20 0"/>
+              <path d="M9 29 q8 -4 16 0 t12 0"/>
+            </g>
+          </g>
+          <!-- oben rechts, halb über der Kante -->
+          <g transform="translate(520,32) rotate(5)">
+            <rect width="56" height="52" rx="2" fill="#F7A8C4"/>
+            <g stroke="#8E2B50" stroke-width="3" stroke-linecap="round" fill="none">
+              <path d="M10 17 q11 -5 22 0"/>
+              <path d="M10 29 q9 -4 18 0"/>
+              <path d="M10 40 q13 -5 26 0"/>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 3 WILDWUCHS -->
+  <div class="slide" data-menu="Ausgangslage · Wildwuchs">
+    <div class="kicker">01 · Ausgangslage</div>
+    <h1>Aus Tempo wird ein Fragment-Labyrinth.</h1>
+    <div class="sub">Man startet mit einer kleinen Vision — und Feature um Feature bleibt haften, bis ein Gebäude entsteht, in dem sich niemand mehr zurechtfindet. Kein System, keine Konsistenz.</div>
+    <div class="kat-stage" id="katStage" role="button" tabindex="0"
+         aria-label="Katamari-Animation: Klick zum Abspielen. Ein kleiner Ball sammelt Fragmente von der Straße ein, wächst dabei und wird zäher.">
+      <div class="kat-cap" id="katCap" aria-live="polite"></div>
+      <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <clipPath id="katBallBody"><circle cx="400" cy="250" r="148"/></clipPath>
+        </defs>
+        <g id="katRoad" stroke="#E3DFD5" stroke-width="4" stroke-linecap="round"></g>
+        <line x1="0" y1="400" x2="800" y2="400" stroke="#E3DFD5" stroke-width="4"/>
+        <g id="katSpeedLines" stroke="#C9C5BA" stroke-linecap="round" fill="none" opacity="0">
+          <path d="M108,206 Q168,202 220,210" stroke-width="4"/>
+          <path d="M84,258 Q156,254 224,260" stroke-width="5"/>
+          <path d="M102,312 Q164,308 222,314" stroke-width="4"/>
+        </g>
+        <g id="katSparkles" fill="#6366F1" opacity="0">
+          <path d="M0,-13 L4,-4 L13,0 L4,4 L0,13 L-4,4 L-13,0 L-4,-4 Z" transform="translate(600,92)"/>
+          <path d="M0,-13 L4,-4 L13,0 L4,4 L0,13 L-4,4 L-13,0 L-4,-4 Z" transform="translate(558,140) scale(.6)"/>
+        </g>
+        <g id="katBallGroup">
+          <ellipse cx="400" cy="400" rx="140" ry="15" fill="#14141C" opacity="0.13"/>
+          <g clip-path="url(#katBallBody)">
+            <circle cx="400" cy="250" r="148" fill="#F2EFE7"/>
+            <ellipse cx="452" cy="322" rx="172" ry="150" fill="#141418" opacity="0.07"/>
+            <ellipse cx="342" cy="178" rx="128" ry="108" fill="#FFFFFF" opacity="0.4"/>
+          </g>
+        </g>
+        <circle id="katBallOutline" cx="400" fill="none" stroke="#141418" stroke-width="6"/>
+        <g id="katItems"></g>
+        <g id="katFaceGroup">
+          <g class="kat-face" data-mood="0" opacity="0">
+            <ellipse cx="358" cy="288" rx="15" ry="9" fill="#FF9EB5" opacity=".55"/>
+            <ellipse cx="452" cy="283" rx="15" ry="9" fill="#FF9EB5" opacity=".55"/>
+            <path d="M394,243 Q408,236 422,244" stroke="#141418" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <path d="M446,243 Q460,236 474,244" stroke="#141418" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <circle cx="408" cy="266" r="13" fill="#141418"/><circle cx="405" cy="262" r="3.4" fill="#fff"/>
+            <circle cx="460" cy="264" r="13" fill="#141418"/><circle cx="457" cy="260" r="3.4" fill="#fff"/>
+            <path d="M418,298 Q434,312 452,296" stroke="#141418" stroke-width="5" stroke-linecap="round" fill="none"/>
+          </g>
+          <g class="kat-face" data-mood="1" opacity="0">
+            <ellipse cx="358" cy="288" rx="13" ry="8" fill="#FF9EB5" opacity=".38"/>
+            <ellipse cx="452" cy="283" rx="13" ry="8" fill="#FF9EB5" opacity=".38"/>
+            <path d="M395,241 L421,241" stroke="#141418" stroke-width="5" stroke-linecap="round"/>
+            <path d="M447,240 L473,240" stroke="#141418" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="408" cy="266" r="12" fill="#141418"/><circle cx="405" cy="262" r="3.2" fill="#fff"/>
+            <circle cx="460" cy="264" r="12" fill="#141418"/><circle cx="457" cy="260" r="3.2" fill="#fff"/>
+            <path d="M420,301 L452,299" stroke="#141418" stroke-width="5" stroke-linecap="round"/>
+          </g>
+          <g class="kat-face" data-mood="2" opacity="0">
+            <path d="M394,236 L422,247" stroke="#141418" stroke-width="5" stroke-linecap="round"/>
+            <path d="M474,235 L446,246" stroke="#141418" stroke-width="5" stroke-linecap="round"/>
+            <ellipse cx="408" cy="268" rx="12" ry="10" fill="#141418"/><circle cx="405" cy="264" r="3" fill="#fff"/>
+            <ellipse cx="460" cy="266" rx="12" ry="10" fill="#141418"/><circle cx="457" cy="262" r="3" fill="#fff"/>
+            <path d="M418,303 Q426,295 434,303 Q442,311 450,302" stroke="#141418" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <path d="M494,248 q7,13 0,18 q-7,-5 0,-18 Z" fill="#7DD3FC" stroke="#141418" stroke-width="3"/>
+          </g>
+          <g class="kat-face" data-mood="3" opacity="0">
+            <path d="M390,234 L424,252" stroke="#141418" stroke-width="6" stroke-linecap="round"/>
+            <path d="M478,233 L444,251" stroke="#141418" stroke-width="6" stroke-linecap="round"/>
+            <ellipse cx="408" cy="272" rx="12" ry="9" fill="#141418"/><circle cx="405" cy="269" r="2.8" fill="#fff"/>
+            <ellipse cx="460" cy="270" rx="12" ry="9" fill="#141418"/><circle cx="457" cy="267" r="2.8" fill="#fff"/>
+            <path d="M416,310 Q434,294 452,308" stroke="#141418" stroke-width="6" stroke-linecap="round" fill="none"/>
+            <g stroke="#8E8A80" stroke-width="3.6" stroke-linecap="round" fill="none">
+              <path d="M336,150 q11,-11 22,0"/>
+              <path d="M342,136 q9,-9 18,0"/>
+              <path d="M496,148 q11,-11 22,0"/>
+            </g>
+          </g>
+        </g>
+        <g id="katPusher">
+          <g id="katPusherSide">
+          <g id="katPusherLean">
+            <g id="katLegA" stroke="#141418" stroke-width="3.4" stroke-linecap="round" fill="none">
+              <path d="M-3,-14 L-9,-1"/>
+            </g>
+            <g id="katLegB" stroke="#141418" stroke-width="3.4" stroke-linecap="round" fill="none">
+              <path d="M2,-14 L7,-1"/>
+            </g>
+            <path d="M-7,-30 q7,-4 14,0 l2,17 q-9,4 -18,0 Z" fill="#6366F1" stroke="#141418" stroke-width="3.2" stroke-linejoin="round"/>
+            <path d="M5,-27 L28,-20" stroke="#141418" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+            <path d="M4,-22 L27,-15" stroke="#141418" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+            <circle cx="0" cy="-39" r="9.5" fill="#F2EFE7" stroke="#141418" stroke-width="3.2"/>
+            <path d="M0,-48.5 q4,-6 8,-4" stroke="#141418" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+            <circle cx="4" cy="-40" r="1.9" fill="#141418"/>
+            <path id="katSweat" d="M-9,-46 q4,7 0,9.5 q-4,-2.5 0,-9.5 Z" fill="#7DD3FC" stroke="#141418" stroke-width="2" opacity="0"/>
+            <path id="katSweat2" d="M9,-44 q3.5,6 0,8.5 q-3.5,-2.5 0,-8.5 Z" fill="#7DD3FC" stroke="#141418" stroke-width="2" opacity="0"/>
+          </g>
+          </g>
+          <g id="katPusherFront" opacity="0">
+            <path d="M-4,-14 L-4,-1" stroke="#141418" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+            <path d="M4,-14 L4,-1" stroke="#141418" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+            <path d="M-8,-30 q8,-4 16,0 l0,17 q-8,4 -16,0 Z" fill="#6366F1" stroke="#141418" stroke-width="3.2" stroke-linejoin="round"/>
+            <path d="M-8,-27 L-12,-13" stroke="#141418" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+            <path d="M8,-27 L12,-13" stroke="#141418" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+            <circle cx="0" cy="-39" r="9.5" fill="#F2EFE7" stroke="#141418" stroke-width="3.2"/>
+            <path d="M0,-48.5 q4,-6 8,-4" stroke="#141418" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+            <circle cx="-3.6" cy="-40.5" r="1.9" fill="#141418"/>
+            <circle cx="3.6" cy="-40.5" r="1.9" fill="#141418"/>
+            <ellipse cx="0" cy="-34.5" rx="2.6" ry="2" fill="#141418"/>
+            <path d="M-14.5,-46 q4,7 0,9.5 q-4,-2.5 0,-9.5 Z" fill="#7DD3FC" stroke="#141418" stroke-width="2"/>
+            <path d="M14.5,-44.5 q3.5,6 0,8.5 q-3.5,-2.5 0,-8.5 Z" fill="#7DD3FC" stroke="#141418" stroke-width="2"/>
+          </g>
+        </g>
+      </svg>
+      <div class="kat-play" id="katPlay">
+        <div class="kat-btn">
+          <svg viewBox="0 0 12 14" fill="#fff" aria-hidden="true"><path d="M0 0 L12 7 L0 14 Z"/></svg>
+          Abspielen
+        </div>
+      </div>
+      <div class="kat-replay" id="katReplay">Klick · nochmal</div>
+      <div class="kat-progress"><i id="katBar"></i></div>
+    </div>
+  </div>
+
+  <script>
+  (() => {
+    const DUR = 8000, V = 0.26, PIVOT_X = 400, PIVOT_Y = 398, R = 148, GROUND = 400;
+    const S0 = 0.10, S1 = 1.0, DOCK_DEG = 62, STEP_MS = 200, ARM_LEN = 28, ARM_Y = 20, STOP = 0.88;
+    const SPECTRUM = ['#6366F1', '#06B6D4', '#10B981', '#F59E0B', '#EC4899'];
+    const TYPES = ['card', 'pill', 'icon', 'pill', 'card', 'icon'];
+    const N = 18;
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const itemsHost = document.getElementById('katItems');
+    const roadHost = document.getElementById('katRoad');
+
+    const marks = [];
+    for (let i = 0; i < 14; i++) {
+      const m = document.createElementNS(svgNS, 'path');
+      m.setAttribute('d', 'M0,408 l26,0');
+      roadHost.appendChild(m);
+      marks.push({ el: m, x0: i * 70 });
+    }
+
+    function shape(type, color) {
+      const g = document.createElementNS(svgNS, 'g');
+      const add = (tag, attrs) => {
+        const el = document.createElementNS(svgNS, tag);
+        for (const k in attrs) el.setAttribute(k, attrs[k]);
+        g.appendChild(el);
+      };
+      if (type === 'pill') {
+        add('rect', {x:-19,y:-7,width:38,height:14,rx:7,fill:color,stroke:'#141418','stroke-width':3.4});
+        add('rect', {x:-10,y:-2.5,width:20,height:5,rx:2.5,fill:'#fff','fill-opacity':.85});
+        return { g, halfH: 7 };
+      }
+      if (type === 'icon') {
+        add('rect', {x:-13,y:-13,width:26,height:26,rx:7,fill:'#fff',stroke:'#141418','stroke-width':3.4});
+        add('circle', {r:5.5,fill:color});
+        return { g, halfH: 13 };
+      }
+      add('rect', {x:-22,y:-15,width:44,height:30,rx:7,fill:'#fff',stroke:'#141418','stroke-width':3.4});
+      add('rect', {x:-16,y:-10,width:20,height:5,rx:2.5,fill:color});
+      add('rect', {x:-16,y:-1,width:30,height:4,rx:2,fill:'#E4E1DA'});
+      add('rect', {x:-16,y:6,width:22,height:4,rx:2,fill:'#E4E1DA'});
+      return { g, halfH: 15 };
+    }
+
+    const mv = p => Math.min(p, STOP) / STOP;
+    const scaleAt = q => S0 + (S1 - S0) * Math.pow(q, 0.85);
+
+    const ANGLE_LUT = (() => {
+      const steps = 400, lut = new Float64Array(steps + 1);
+      let a = 0;
+      for (let i = 1; i <= steps; i++) {
+        const p = i / steps;
+        a += (DUR / steps) * 0.105 / Math.max(scaleAt(p), 0.10);
+        lut[i] = a;
+      }
+      return lut;
+    })();
+    function angleAt(p) {
+      const f = Math.max(0, Math.min(1, p)) * 400;
+      const i = Math.floor(f), frac = f - i;
+      return i >= 400 ? ANGLE_LUT[400] : ANGLE_LUT[i] + (ANGLE_LUT[i + 1] - ANGLE_LUT[i]) * frac;
+    }
+
+    const nodes = [];
+    for (let i = 0; i < N; i++) {
+      const type = TYPES[i % TYPES.length];
+      const { g, halfH } = shape(type, SPECTRUM[i % SPECTRUM.length]);
+      const outer = document.createElementNS(svgNS, 'g');
+      outer.appendChild(g);
+      itemsHost.appendChild(outer);
+      const t = 0.06 + (i / N) * 0.78;
+      const k = 0.80 + ((i * 7) % 5) * 0.038;
+      const dock = DOCK_DEG + (((i * 13) % 7) - 3) * 2.5;
+      const theta = dock - angleAt(mv(t));
+      const s = scaleAt(mv(t));
+      const cy = PIVOT_Y - R * s;
+      const d = R * s * k;
+      const rad = dock * Math.PI / 180;
+      nodes.push({
+        outer, t, k, theta, halfH,
+        jitter: (((i * 11) % 9) - 4) * 3,
+        pickX: PIVOT_X + Math.cos(rad) * d,
+        pickY: cy + Math.sin(rad) * d
+      });
+    }
+
+    const ballGroup = document.getElementById('katBallGroup');
+    const faceGroup = document.getElementById('katFaceGroup');
+    const faces = Array.from(document.querySelectorAll('.kat-face'));
+    const speedL = document.getElementById('katSpeedLines');
+    const sparkles = document.getElementById('katSparkles');
+    const pusher = document.getElementById('katPusher');
+    const lean = document.getElementById('katPusherLean');
+    const legA = document.getElementById('katLegA');
+    const legB = document.getElementById('katLegB');
+    const sweat = document.getElementById('katSweat');
+    const sweat2 = document.getElementById('katSweat2');
+    const pSide = document.getElementById('katPusherSide');
+    const pFront = document.getElementById('katPusherFront');
+    const ballOutline = document.getElementById('katBallOutline');
+    const cap = document.getElementById('katCap');
+    const bar = document.getElementById('katBar');
+    const play = document.getElementById('katPlay');
+    const replay = document.getElementById('katReplay');
+
+    const BEATS = [
+      [0.00, 'Eine kleine, saubere Vision.'],
+      [0.28, 'Ein Feature bleibt haften. Und noch eins.'],
+      [0.56, 'Es rollt schwerer.'],
+      [0.88, 'Kein System. Keine Konsistenz.']
+    ];
+
+    const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let start = null, raf = null, beat = -1;
+
+    function frame(p) {
+      const q = mv(p);
+      const pm = Math.min(p, STOP);
+      const ms = pm * DUR;
+      const moving = p < STOP;
+      const s = scaleAt(q);
+      const angle = angleAt(q);
+      const cy = PIVOT_Y - R * s;
+
+      const tf = `translate(${PIVOT_X},${PIVOT_Y}) scale(${s.toFixed(4)}) translate(${-PIVOT_X},${-PIVOT_Y})`;
+      ballGroup.setAttribute('transform', tf);
+      faceGroup.setAttribute('transform', tf);
+      ballOutline.setAttribute('cy', cy.toFixed(1));
+      ballOutline.setAttribute('r', (R * s).toFixed(1));
+
+      for (const m of marks) {
+        const x = ((m.x0 - ms * V) % 980 + 980) % 980 - 90;
+        m.el.setAttribute('transform', `translate(${x.toFixed(1)},0)`);
+      }
+
+      for (const n of nodes) {
+        if (pm < n.t) {
+          const x = n.pickX + (n.t - pm) * DUR * V;
+          n.outer.setAttribute('transform', `translate(${x.toFixed(1)},${(GROUND - n.halfH).toFixed(1)}) rotate(0)`);
+          n.outer.setAttribute('opacity', x > 810 ? '0' : '1');
+        } else {
+          const wDeg = n.theta + angle;
+          const wRad = wDeg * Math.PI / 180;
+          const d = R * s * n.k;
+          const bx = PIVOT_X + Math.cos(wRad) * d;
+          const by = cy + Math.sin(wRad) * d;
+          const e = clamp01((pm - n.t) / 0.02);
+          const x = n.pickX + (bx - n.pickX) * e;
+          const y = (GROUND - n.halfH) + (by - (GROUND - n.halfH)) * e;
+          n.outer.setAttribute('opacity', '1');
+          n.outer.setAttribute('transform',
+            `translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${((wDeg + 90 + n.jitter) * e).toFixed(1)})`);
+        }
+      }
+
+      const mood = [
+        p < 0.26 ? 1 : clamp01((0.32 - p) / 0.06),
+        p < 0.26 ? 0 : (p < 0.54 ? 1 : clamp01((0.60 - p) / 0.06)),
+        p < 0.54 ? 0 : (p < 0.86 ? 1 : clamp01((0.92 - p) / 0.06)),
+        p < 0.86 ? 0 : clamp01((p - 0.86) / 0.06)
+      ];
+      faces.forEach((f, i) => f.setAttribute('opacity', mood[i].toFixed(2)));
+      speedL.setAttribute('opacity', (0.85 * (1 - clamp01(q / 0.65))).toFixed(2));
+      sparkles.setAttribute('opacity', (1 - clamp01(q / 0.42)).toFixed(2));
+
+      const rr = R * s;
+      const dyy = (GROUND - ARM_Y) - cy;
+      const dxx = Math.sqrt(Math.max(rr * rr - dyy * dyy, 0));
+      pusher.setAttribute('transform', `translate(${(PIVOT_X - dxx - ARM_LEN).toFixed(1)},${GROUND})`);
+
+      const turn = clamp01((p - STOP) / 0.05);
+      if (turn < 0.5) {
+        pSide.setAttribute('opacity', '1');
+        pSide.setAttribute('transform', `scale(${Math.max(1 - turn * 2, 0.001).toFixed(3)},1)`);
+        pFront.setAttribute('opacity', '0');
+      } else {
+        pSide.setAttribute('opacity', '0');
+        pFront.setAttribute('opacity', '1');
+        pFront.setAttribute('transform', `scale(${Math.max(turn * 2 - 1, 0.001).toFixed(3)},1)`);
+      }
+      lean.setAttribute('transform', `rotate(${((5 + 16 * q) * (1 - turn)).toFixed(1)})`);
+      if (moving) {
+        const step = Math.floor(ms / STEP_MS) % 2 === 0;
+        legA.setAttribute('transform', step ? 'rotate(16 -3 -14)' : 'rotate(-14 -3 -14)');
+        legB.setAttribute('transform', step ? 'rotate(-14 2 -14)' : 'rotate(16 2 -14)');
+      } else {
+        legA.setAttribute('transform', 'rotate(7 -3 -14)');
+        legB.setAttribute('transform', 'rotate(-7 2 -14)');
+      }
+      sweat.setAttribute('opacity', clamp01((p - 0.58) / 0.14).toFixed(2));
+      sweat2.setAttribute('opacity', clamp01((p - STOP) / 0.04).toFixed(2));
+
+      let b = 0;
+      for (let i = 0; i < BEATS.length; i++) if (p >= BEATS[i][0]) b = i;
+      if (b !== beat) {
+        beat = b;
+        cap.classList.remove('show');
+        setTimeout(() => { cap.textContent = BEATS[b][1]; cap.classList.add('show'); }, 100);
+      }
+      bar.style.width = (p * 100).toFixed(1) + '%';
+    }
+
+    function tick(ts) {
+      if (start === null) start = ts;
+      const p = clamp01((ts - start) / DUR);
+      frame(p);
+      if (p < 1) raf = requestAnimationFrame(tick);
+      else replay.classList.add('show');
+    }
+
+    function run() {
+      cancelAnimationFrame(raf);
+      start = null; beat = -1;
+      play.classList.add('hidden');
+      replay.classList.remove('show');
+      if (reduced) { frame(1); replay.classList.add('show'); return; }
+      raf = requestAnimationFrame(tick);
+    }
+
+    const katStage = document.getElementById('katStage');
+    katStage.addEventListener('click', e => { e.stopPropagation(); run(); });
+    // Nur Enter, nicht Leertaste — die schaltet im Deck bereits die Slides weiter.
+    katStage.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); run(); } });
+    frame(0);
+    cap.textContent = BEATS[0][1];
+  })();
+  </script>
+
+  <!-- 4 AUSLÖSER (dark) -->
+  <div class="slide dark" data-menu="Der Auslöser">
+    <img class="brandmark" src="Brand/UIPrism-Logos/svg/UIPrism-Mark-White.svg" alt="UIPrism">
+    <div class="kicker">02 · Der Auslöser</div>
+    <h1>„In 3 Monaten macht das die KI."</h1>
+    <div class="sub">Die Ansage der Geschäftsführung: 50 Entwicklerstellen, Designer und Coder bald überflüssig — Features promptet man selbst. Datenschutz und Sicherheit? Für die GF ein Randthema.</div>
+  </div>
+
+  <!-- 5 REAKTION -->
+  <div class="slide" data-menu="Die Reaktion">
+    <div class="kicker">03 · Die Reaktion</div>
+    <h1>Aufräumen bei laufendem Betrieb.</h1>
+    <div class="sub">Zwei Aufgaben zugleich: fünf Jahre Wildwuchs bändigen und den KI-Input auf ein konsistentes Designsystem bringen. Daraus wurde UIPrism.</div>
+  </div>
+
+  <!-- 6 IDEE -->
+  <div class="slide" data-menu="Die Idee">
+    <div class="kicker">04 · Die Idee</div>
+    <h1>Wireframe rein — konsistentes Design raus.</h1>
+    <div class="sub">Liest Screenshots, Wireframes und Repositories, nutzt das Repo als Single Source of Truth und synct nach Figma.</div>
+    <div class="hero-svg" style="max-width:34em;">
+      <svg viewBox="0 0 720 152" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="Links ein wirres Wollknäuel, aus dem ein Faden läuft. Er geht durch ein Prisma in der Mitte. Rechts kommen daraus geordnete, gleich dicke Stäbe in fünf Farben heraus.">
+        <!-- Wollknäuel: die ungeordnete Ausgangslage -->
+        <circle cx="74" cy="76" r="44" fill="#F2EFE7" stroke="#141418" stroke-width="5"/>
+        <g fill="none" stroke="#C4C0B4" stroke-width="3" stroke-linecap="round">
+          <path d="M40 60 C62 44 96 52 106 74"/>
+          <path d="M36 86 C58 104 92 108 112 88"/>
+          <path d="M52 44 C46 72 60 100 84 114"/>
+          <path d="M98 44 C84 66 88 96 66 112"/>
+          <path d="M32 74 C56 66 88 82 114 66"/>
+        </g>
+
+        <!-- Der Faden: wirr am Knäuel, gerade zum Prisma hin -->
+        <path d="M116 66 C142 58 150 82 172 78 C196 74 200 68 222 72 C244 76 250 76 276 76"
+              fill="none" stroke="#141418" stroke-width="4.5" stroke-linecap="round"/>
+
+        <!-- Prisma -->
+        <path d="M332 16 L392 128 L272 128 Z" fill="#EFECFF" stroke="#141418" stroke-width="5" stroke-linejoin="round"/>
+        <path d="M332 52 L364 128 L300 128 Z" fill="#6366F1" stroke="none"/>
+
+        <!-- Ergebnis: geordnete Stäbe, gleich dick, in den Spektrumfarben -->
+        <g stroke="#141418" stroke-width="4.5" stroke-linejoin="round">
+          <rect x="406" y="22"  width="248" height="17" rx="8.5" fill="#6366F1"/>
+          <rect x="406" y="47"  width="188" height="17" rx="8.5" fill="#06B6D4"/>
+          <rect x="406" y="72"  width="286" height="17" rx="8.5" fill="#10B981"/>
+          <rect x="406" y="97"  width="160" height="17" rx="8.5" fill="#F59E0B"/>
+          <rect x="406" y="122" width="222" height="17" rx="8.5" fill="#EC4899"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 7 HYPOTHESE -->
+  <div class="slide" data-menu="Hypothese & Ergebnis">
+    <div class="kicker">05 · Hypothese & Ergebnis</div>
+    <h1>Die Wette: ohne eine Zeile Code baubar.</h1>
+    <div class="result">
+      <div><span class="yes">Als Prototyp — ja.</span></div>
+      <div><span class="no">Als wartbares Produkt — nein.</span></div>
+    </div>
+    <div class="sub" style="margin-top:1.2em;">Mein Denkwandel: Es lag nicht an der Idee, sondern an der Übergabe an mich. Mit KI entsteht schnell Beeindruckendes — aber ohne Code-Verständnis bleibt es fremdgesteuert.</div>
+  </div>
+
+  <!-- 8 JOURNEY 1/2 -->
+  <div class="slide" data-menu="Journey · Was ich weggelassen habe">
+    <div class="kicker">06 · Die Journey (1/2)</div>
+    <h1>Kein Terminal. Alles über die KI.</h1>
+    <div class="sub">Bewusst weggelassen, was mich überfordert — Terminal und klassische Dev-Tools. Stattdessen alles über Claude &amp; Claude Code, per MCP an Miro, GitHub und Figma angebunden. Automatisiert, was ging.</div>
+    <div class="hero-svg" style="max-width:15em;">
+      <svg viewBox="0 0 220 190" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="Ein Terminal-Fenster mit Eingabezeile, durchgestrichen von einem roten Verbotszeichen.">
+        <!-- Terminal-Fenster -->
+        <rect x="20" y="18" width="180" height="126" rx="11" fill="#141418" stroke="#141418" stroke-width="5"/>
+        <rect x="20" y="18" width="180" height="30" rx="11" fill="#33333E"/>
+        <rect x="20" y="38" width="180" height="10" fill="#33333E"/>
+        <g fill="#8C8C96">
+          <circle cx="38" cy="33" r="4.5"/><circle cx="53" cy="33" r="4.5"/><circle cx="68" cy="33" r="4.5"/>
+        </g>
+        <g fill="none" stroke="#6366F1" stroke-width="4" stroke-linecap="round">
+          <path d="M36 74 L54 88 L36 102"/>
+        </g>
+        <rect x="62" y="94" width="70" height="6" rx="3" fill="#5A5A66"/>
+        <rect x="36" y="116" width="46" height="6" rx="3" fill="#3E3E4C"/>
+
+        <!-- Verbotszeichen -->
+        <circle cx="110" cy="81" r="72" fill="none" stroke="#EC4899" stroke-width="11" opacity="0.9"/>
+        <line x1="60" y1="31" x2="160" y2="131" stroke="#EC4899" stroke-width="11" stroke-linecap="round" opacity="0.9"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 9 JOURNEY 2/2 -->
+  <div class="slide" data-menu="Journey · Der Preis">
+    <div class="kicker">06 · Die Journey (2/2)</div>
+    <h1>Alles automatisiert — der Preis ist Blindflug.</h1>
+    <div class="sub">Der Entwicklungsprozess liegt komplett bei der KI, ich greife kaum ein. Schnelle Ergebnisse, aber intransparent: unzählige Iterationen, unklare Fehler — und mein eigener Lernfaktor bleibt gering. Genau daher meine Unruhe.</div>
+    <div class="hero-svg" style="max-width:18em;">
+      <svg viewBox="0 0 360 210" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="Eine Figur mit Augenbinde tastet blind nach der Tastatur vor einem Bildschirm, auf dem Zeilen vorbeirauschen — eine davon rosa markiert als Fehler.">
+        <line x1="30" y1="190" x2="330" y2="190" stroke="#E3DFD5" stroke-width="4" stroke-linecap="round"/>
+
+        <!-- Monitor -->
+        <rect x="246" y="176" width="30" height="14" rx="3" fill="#FFFFFF" stroke="#141418" stroke-width="4"/>
+        <rect x="253" y="170" width="16" height="8" fill="#FFFFFF" stroke="#141418" stroke-width="4"/>
+        <rect x="195" y="70" width="130" height="100" rx="11" fill="#FFFFFF" stroke="#141418" stroke-width="5"/>
+        <rect x="207" y="82" width="106" height="76" rx="6" fill="#141418"/>
+        <g>
+          <rect x="214" y="90"  width="80" height="8" rx="4" fill="#10B981" opacity="0.55"/>
+          <rect x="214" y="104" width="55" height="8" rx="4" fill="#5A5A66"/>
+          <rect x="214" y="118" width="92" height="8" rx="4" fill="#10B981" opacity="0.4"/>
+          <rect x="214" y="132" width="46" height="8" rx="4" fill="#EC4899"/>
+          <rect x="214" y="146" width="74" height="8" rx="4" fill="#5A5A66"/>
+        </g>
+
+        <!-- Tastatur: die Hände finden sie nicht ganz -->
+        <rect x="128" y="182" width="54" height="10" rx="3" fill="#FFFFFF" stroke="#141418" stroke-width="3.5"/>
+        <line x1="134" y1="187" x2="176" y2="187" stroke="#E0DED7" stroke-width="2"/>
+
+        <!-- Figur: tastet blind nach vorn -->
+        <path d="M90,150 L84,190" stroke="#141418" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <path d="M100,150 L106,190" stroke="#141418" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <path d="M78,96 q17,-9 34,0 l4,54 q-21,10 -42,0 Z" fill="#6366F1" stroke="#141418" stroke-width="5" stroke-linejoin="round"/>
+        <path d="M108,104 L150,134" stroke="#141418" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <path d="M106,116 L148,148" stroke="#141418" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <circle cx="95" cy="76" r="18" fill="#F2EFE7" stroke="#141418" stroke-width="5"/>
+        <path d="M95,58 q7,-11 15,-7" stroke="#141418" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+        <path d="M87,95 q8,3 16,0" stroke="#141418" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <!-- Augenbinde -->
+        <rect x="79" y="72" width="34" height="11" rx="5.5" fill="#141418"/>
+        <path d="M113,75 q9,-2 14,3" stroke="#141418" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <path d="M113,80 q9,4 12,10" stroke="#141418" stroke-width="4" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 9 THESE (dark) -->
+  <div class="slide dark" data-menu="★ These: Bauen mit KI">
+    <img class="brandmark" src="Brand/UIPrism-Logos/svg/UIPrism-Mark-White.svg" alt="UIPrism">
+    <div class="kicker">07 · Bauen mit KI · ★ Herzstück</div>
+    <h1>Chat ist das falsche Interface für Designer.</h1>
+    <div class="sub">Design-Denken ist visuell und geht in die Breite — Wireframes, Pläne, zunehmende Detailtiefe. Ein Textchat erzwingt eine lineare Abfolge. Genau da liegt der Bruch.</div>
+    <div class="hero-svg thesis">
+      <svg viewBox="0 0 1120 168" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="Links fächert sich das Denken in die Breite auf: aus einem Punkt laufen Bögen zu Wireframe-Bausteinen unterschiedlicher Detailtiefe. Rechts, hinter einem engen Tor, bleibt davon eine einzige Reihe gleicher Balken übrig.">
+        <g fill="#8C8C96" font-size="11" font-weight="700" letter-spacing="1.6"
+           font-family="Inter,Helvetica Neue,Arial,sans-serif">
+          <text x="2" y="12">IN DIE BREITE</text>
+          <text x="726" y="12">IN EINE ZEILE</text>
+        </g>
+
+        <!-- Divergenz: ein Ausgangspunkt, der sich auffächert -->
+        <circle cx="30" cy="92" r="9" fill="#8B8DF7" stroke="#F2EFE7" stroke-width="4"/>
+        <g fill="none" stroke="#4A4A56" stroke-width="3.5" stroke-linecap="round">
+          <path d="M42 88 C130 66 190 44 268 38"/>
+          <path d="M42 90 C140 84 200 74 286 70"/>
+          <path d="M42 94 C150 104 210 108 300 108"/>
+          <path d="M42 97 C130 118 190 134 272 142"/>
+          <path d="M42 92 C120 92 180 90 244 90"/>
+        </g>
+
+        <!-- Bausteine am Ende der Bögen: nach rechts zunehmende Detailtiefe -->
+        <g stroke="#F2EFE7" stroke-width="4" stroke-linejoin="round">
+          <g transform="translate(244,78) rotate(-4)">
+            <rect width="60" height="30" rx="6" fill="#1C1C24"/>
+            <rect x="9" y="9" width="24" height="6" rx="3" fill="#8B8DF7" stroke="none"/>
+          </g>
+          <g transform="translate(268,20) rotate(4)">
+            <rect width="74" height="40" rx="6" fill="#1C1C24"/>
+            <rect x="10" y="10" width="28" height="6" rx="3" fill="#4A4A5C" stroke="none"/>
+            <rect x="10" y="24" width="46" height="5" rx="2.5" fill="#33333E" stroke="none"/>
+          </g>
+          <g transform="translate(300,94) rotate(3)">
+            <rect width="86" height="52" rx="6" fill="#1C1C24"/>
+            <rect x="11" y="11" width="32" height="6" rx="3" fill="#8B8DF7" stroke="none"/>
+            <rect x="11" y="26" width="58" height="5" rx="2.5" fill="#33333E" stroke="none"/>
+            <rect x="11" y="37" width="44" height="5" rx="2.5" fill="#33333E" stroke="none"/>
+          </g>
+          <g transform="translate(396,34) rotate(-3)">
+            <rect width="96" height="58" rx="6" fill="#1C1C24"/>
+            <rect x="12" y="12" width="34" height="6" rx="3" fill="#4A4A5C" stroke="none"/>
+            <rect x="12" y="28" width="66" height="5" rx="2.5" fill="#33333E" stroke="none"/>
+            <rect x="12" y="39" width="52" height="5" rx="2.5" fill="#33333E" stroke="none"/>
+            <rect x="12" y="50" width="60" height="5" rx="2.5" fill="#33333E" stroke="none"/>
+          </g>
+          <g transform="translate(410,112) rotate(5)">
+            <rect width="70" height="36" rx="6" fill="#1C1C24"/>
+            <rect x="10" y="10" width="26" height="6" rx="3" fill="#4A4A5C" stroke="none"/>
+            <rect x="10" y="24" width="42" height="5" rx="2.5" fill="#33333E" stroke="none"/>
+          </g>
+          <g transform="translate(514,64) rotate(2)">
+            <rect width="104" height="64" rx="6" fill="#1C1C24"/>
+            <rect x="12" y="12" width="38" height="7" rx="3.5" fill="#8B8DF7" stroke="none"/>
+            <rect x="12" y="30" width="74" height="5" rx="2.5" fill="#33333E" stroke="none"/>
+            <rect x="12" y="41" width="58" height="5" rx="2.5" fill="#33333E" stroke="none"/>
+            <rect x="12" y="52" width="66" height="5" rx="2.5" fill="#33333E" stroke="none"/>
+          </g>
+        </g>
+
+        <!-- Das enge Tor: hier bricht es -->
+        <g stroke="#8B8DF7" stroke-width="5" stroke-linecap="round" fill="none">
+          <path d="M646 14 C688 14 694 74 700 84"/>
+          <path d="M646 154 C688 154 694 94 700 84"/>
+        </g>
+
+        <!-- Ergebnis: eine Reihe, alles gleich -->
+        <g stroke="#F2EFE7" stroke-width="4">
+          <rect x="726" y="76" width="52" height="18" rx="9" fill="#26262F"/>
+          <rect x="790" y="76" width="52" height="18" rx="9" fill="#26262F"/>
+          <rect x="854" y="76" width="52" height="18" rx="9" fill="#26262F"/>
+          <rect x="918" y="76" width="52" height="18" rx="9" fill="#26262F"/>
+          <rect x="982" y="76" width="52" height="18" rx="9" fill="#26262F"/>
+        </g>
+        <g fill="#5A5A66">
+          <circle cx="1052" cy="85" r="3"/>
+          <circle cx="1066" cy="85" r="3"/>
+          <circle cx="1080" cy="85" r="3"/>
+        </g>
+      </svg>
+    </div>
+    <div class="beleg">Damit nicht allein: Amelia Wattenberger (GitHub Next) &amp; Nielsen Norman Group argumentieren dasselbe. Es geht um Interface-Passung — nicht darum, dass KI für Designer „unmöglich" wäre.</div>
+  </div>
+
+  <!-- 10 VISION -->
+  <div class="slide" data-menu="Vision & Next Steps">
+    <div class="kicker">08 · Vision & Next Steps</div>
+    <h1>Die Idee trägt. Die Umsetzung braucht Code-Tiefe.</h1>
+    <div class="sub">Nächster Schritt evtl. Übergabe an Entwickler-Hand; Weg: klein testen → Open Source → bottom-up → Enterprise.</div>
+  </div>
+
+  <!-- 11 Q&A -->
+  <div class="slide" data-menu="Q&A">
+    <div class="kicker">Q&A</div>
+    <h1>Fragen?</h1>
+    <div class="qs">
+      <div class="q"><b>1.</b> Wie erlebt ihr das Gefühl, dass die KI schneller baut, als ihr folgen könnt?</div>
+      <div class="q"><b>2.</b> Würdet ihr ein KI-Projekt je an jemanden mit Code-Skills abgeben — oder nie aus der Hand?</div>
+    </div>
+    <div class="links">
+      <a class="link" data-link="live" href="#" target="_blank">Live</a>
+      <a class="link" data-link="repo" href="#" target="_blank">Repo</a>
+      <a class="link" data-link="onepager" href="#" target="_blank">One-Pager</a>
+      <a class="link" data-link="linkedin" href="#" target="_blank">LinkedIn</a>
+    </div>
+    <div class="foot">Danke fürs Zuhören.</div>
+  </div>
+
+</div>
+
+<button class="fsbtn" id="fsBtn" title="Vollbild">⛶</button>
+<div class="chrome">
+  <button class="navbtn" id="prevBtn">‹</button>
+  <div class="dots" id="dots"></div>
+  <button class="navbtn" id="nextBtn">›</button>
+  <span class="counter" id="counter"></span>
+</div>
+
+<script>
+  const LINKS = {
+    live: "https://designbridge-production.up.railway.app/",
+    repo: "https://github.com/robbiekraus/designbridge",
+    onepager: "https://uiprism.netlify.app",
+    linkedin: "https://www.linkedin.com/in/robert-kraus-uxuidesign/"
+  };
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let idx = 0;
+  function applyLinks(){
+    document.querySelectorAll('[data-link]').forEach(el=>{
+      const url = LINKS[el.getAttribute('data-link')];
+      if(url){ el.href=url; el.classList.add('active'); }
+      else { el.removeAttribute('href'); el.style.opacity=.45; }
+    });
+  }
+  function build(){
+    const d=document.getElementById('dots');
+    slides.forEach((s,i)=>{
+      const dot=document.createElement('div');dot.className='dot';
+      dot.addEventListener('click',()=>show(i));d.appendChild(dot);
+    });
+  }
+  function show(i){
+    idx=Math.max(0,Math.min(slides.length-1,i));
+    slides.forEach((s,j)=>s.classList.toggle('active',j===idx));
+    document.querySelectorAll('.dot').forEach((d,j)=>d.classList.toggle('active',j===idx));
+    document.getElementById('counter').textContent=(idx+1)+' / '+slides.length;
+  }
+  document.getElementById('prevBtn').addEventListener('click',()=>show(idx-1));
+  document.getElementById('nextBtn').addEventListener('click',()=>show(idx+1));
+  document.getElementById('fsBtn').addEventListener('click',()=>{
+    if(!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  });
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight',' ','PageDown'].includes(e.key)) show(idx+1);
+    else if(['ArrowLeft','PageUp'].includes(e.key)) show(idx-1);
+  });
+  build();applyLinks();show(0);
+</script>
+</body>
+</html>

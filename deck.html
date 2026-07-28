@@ -1,355 +1,354 @@
 <!DOCTYPE html>
-<html lang="de">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UIPrism – Deck (Low-Fi)</title>
-<link rel="icon" type="image/svg+xml" href="Brand/UIPrism-Logos/svg/UIPrism-Favicon.svg">
-<style>
-  :root{
-    --bg:#FAFAF9; --ink:#141418; --sub:#5B5B66; --accent:#6366F1;
-    --line:#ECEAE6; --darkbg:#0E0E11; --card:#F2F1ED;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html,body{height:100%;background:#e7e5df;
-    font-family:'Inter','Helvetica Neue',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
-    color:var(--ink);-webkit-font-smoothing:antialiased;}
-  .viewport{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
-  .slide{
-    display:none;flex-direction:column;justify-content:center;
-    width:min(94vw,167vh);aspect-ratio:16/9;background:var(--bg);
-    border-radius:14px;box-shadow:0 24px 70px rgba(20,20,28,.16);
-    padding:7% 8%;position:relative;
-    font-size:clamp(12px,1.5vw,26px);
-  }
-  .slide.active{display:flex;}
-  .slide.dark{background:var(--darkbg);color:#fff;}
-  .slide.dark .sub{color:#B9B9C4;}
-  .slide.dark .kicker{color:#A9A2FF;}
-  .slide.dark .beleg{color:#77737f;}
-
-  .kicker{font-size:0.58em;letter-spacing:2px;text-transform:uppercase;
-    color:var(--accent);font-weight:700;margin-bottom:1.1em;}
-  h1{font-size:2.05em;line-height:1.1;font-weight:800;letter-spacing:-0.02em;
-    max-width:17em;margin-bottom:0.7em;}
-  .sub{font-size:0.9em;line-height:1.5;color:var(--sub);max-width:31em;font-weight:400;}
-  .beleg{font-size:0.66em;line-height:1.45;color:#9A968C;max-width:31em;margin-top:1em;font-style:italic;}
-  .foot{position:absolute;left:8%;bottom:6.5%;font-size:0.72em;color:var(--sub);}
-  .foot b{color:var(--ink);font-weight:700;}
-  .slide.dark .foot b{color:#fff;}
-
-  #s0 h1{font-size:3.4em;margin-bottom:0.5em;}
-
-  .intro-row{display:flex;align-items:center;gap:1.4em;}
-  .avatar{width:4.4em;height:4.4em;border-radius:50%;object-fit:cover;flex-shrink:0;}
-
-  .visual{margin-top:1.4em;border:1.5px dashed #CFCcC4;border-radius:12px;
-    background:var(--card);color:#9A968C;font-size:0.72em;
-    padding:1.6em;display:flex;align-items:center;justify-content:center;
-    text-align:center;min-height:5.5em;max-width:34em;}
-
-  .flow{display:flex;align-items:center;gap:1em;margin-top:1.5em;flex-wrap:wrap;}
-  .chip{background:#fff;border:1px solid var(--line);border-radius:10px;
-    padding:0.7em 1.05em;font-size:0.72em;font-weight:700;box-shadow:0 3px 10px rgba(0,0,0,.04);}
-  .chip.acc{background:var(--accent);color:#fff;border-color:var(--accent);}
-  .arrow{color:#C7C4BC;font-size:1.1em;font-weight:700;}
-
-  .result{margin-top:1.3em;display:flex;gap:2.2em;flex-wrap:wrap;}
-  .result .yes{color:#16A34A;font-weight:700;font-size:0.9em;}
-  .result .no{color:#DC2626;font-weight:700;font-size:0.9em;}
-
-  .qs{margin-top:1.2em;max-width:32em;}
-  .qs .q{font-size:0.86em;color:var(--sub);margin-bottom:0.55em;line-height:1.45;}
-  .qs .q b{color:var(--ink);}
-  .links{display:flex;gap:0.7em;flex-wrap:wrap;margin-top:1.6em;}
-  .link{font-size:0.7em;font-weight:700;padding:0.55em 0.95em;border:1px solid var(--line);
-    border-radius:999px;color:var(--sub);text-decoration:none;background:#fff;}
-  .link.active{color:var(--accent);border-color:var(--accent);}
-
-  .chrome{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;
-    justify-content:center;gap:1em;padding:0.9em 0;z-index:50;}
-  .navbtn{background:#fff;border:1px solid #DedCd6;width:2.3em;height:2.3em;border-radius:50%;
-    font-size:1em;cursor:pointer;display:flex;align-items:center;justify-content:center;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);}
-  .navbtn:hover{background:#f0eee9;}
-  .dots{display:flex;gap:0.35em;flex-wrap:wrap;max-width:44vw;justify-content:center;}
-  .dot{width:0.5em;height:0.5em;border-radius:50%;background:#CccabF;cursor:pointer;}
-  .dot.active{background:var(--accent);width:1.3em;border-radius:4px;}
-  .counter{font-size:0.78em;color:#6b6878;min-width:3.4em;text-align:center;font-family:ui-monospace,monospace;}
-  .fsbtn{position:fixed;top:1em;right:1em;background:#fff;border:1px solid #DedCd6;width:2.1em;height:2.1em;
-    border-radius:50%;cursor:pointer;z-index:60;font-size:0.85em;box-shadow:0 2px 8px rgba(0,0,0,.08);}
-
-  /* feines Branding auf dunklen Slides */
-  .brandmark{position:absolute;top:6.5%;right:7%;height:1.9em;width:auto;opacity:.9;}
-  /* echter App-Screenshot */
-  .shot{margin-top:1.3em;max-width:34em;width:100%;border-radius:10px;
-    border:1px solid var(--line);box-shadow:0 12px 34px rgba(20,20,28,.14);display:block;}
-  .shot-cap{font-size:0.6em;color:#9A968C;margin-top:0.6em;font-style:italic;}
-  /* Hero-Visual (Fragment-Labyrinth) */
-  .hero-svg{margin-top:1.15em;max-width:35em;width:100%;}
-  .hero-svg svg{width:100%;height:auto;display:block;}
-  .hero-cap{font-size:0.6em;color:#9A968C;margin-top:0.55em;font-style:italic;}
-  /* Zwei-Screenshot-Galerie */
-  .shots{margin-top:1.15em;display:flex;gap:0.8em;max-width:36em;width:100%;}
-  .shots figure{flex:1;margin:0;}
-  .shots img{width:100%;height:auto;border-radius:8px;border:1px solid var(--line);
-    box-shadow:0 10px 28px rgba(20,20,28,.13);display:block;}
-  .shots figcaption{font-size:0.56em;color:#9A968C;margin-top:0.45em;font-style:italic;text-align:center;}
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
 </head>
 <body>
-<div class="viewport">
+<x-dc>
+<helmet>
+<meta name="theme-color" content="#6366F1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  body{margin:0;font-family:'Inter','Helvetica Neue',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;-webkit-font-smoothing:antialiased;font-feature-settings:"ss01","cv05"}
+  a{color:#4A3AD1;text-decoration:none}
+  a:hover{color:#6366F1}
+  @keyframes deckRise{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:none}}
+  @keyframes deckPunch{0%{opacity:0;transform:translateY(40px) scale(.9)}60%{opacity:1;transform:translateY(-5px) scale(1.03)}100%{opacity:1;transform:none}}
+  @keyframes deckDraw{from{stroke-dashoffset:var(--len,600)}to{stroke-dashoffset:0}}
+  @keyframes deckPop{0%{opacity:0;transform:scale(0)}70%{opacity:1;transform:scale(1.35)}100%{opacity:1;transform:scale(1)}}
+  @keyframes deckStrike{from{width:0}to{width:calc(100% + .08em)}}
+  deck-stage section[data-deck-active] h1,
+  deck-stage section[data-deck-active] h2{animation:deckRise .6s cubic-bezier(.2,.7,.3,1) both}
+  deck-stage section[data-deck-active] p{animation:deckRise .6s .18s cubic-bezier(.2,.7,.3,1) both}
+  deck-stage section[data-deck-active] svg,
+  deck-stage section[data-deck-active] img{animation:deckRise .6s .32s cubic-bezier(.2,.7,.3,1) both}
+  deck-stage section[data-deck-active] [data-punch]{animation:deckPunch .7s .1s cubic-bezier(.2,.7,.3,1) both}
+  deck-stage section[data-deck-active] [data-anim="stagger"]>*{animation:deckRise .55s cubic-bezier(.2,.7,.3,1) both}
+  deck-stage section[data-deck-active] [data-anim="stagger"]>*:nth-child(1){animation-delay:.3s}
+  deck-stage section[data-deck-active] [data-anim="stagger"]>*:nth-child(2){animation-delay:.5s}
+  deck-stage section[data-deck-active] [data-anim="stagger"]>*:nth-child(3){animation-delay:.7s}
+  deck-stage section[data-deck-active] [data-anim="stagger"]>*:nth-child(4){animation-delay:.9s}
+  deck-stage section[data-deck-active] [data-anim="stagger"]>*:nth-child(5){animation-delay:1.1s}
+  deck-stage section[data-deck-active] [data-anim="stagger"]>*:nth-child(6){animation-delay:1.3s}
+  deck-stage section[data-deck-active] [data-anim="stagger"]>*:nth-child(7){animation-delay:1.5s}
+  deck-stage section[data-deck-active] [data-draw]{stroke-dasharray:var(--len,600);animation:deckDraw 1.1s .45s ease both}
+  [data-pop]{transform-box:fill-box;transform-origin:center}
+  deck-stage section[data-deck-active] [data-pop]{animation:deckPop .45s both}
+  deck-stage section[data-deck-active] [data-pop]:nth-of-type(1){animation-delay:.65s}
+  deck-stage section[data-deck-active] [data-pop]:nth-of-type(2){animation-delay:.8s}
+  deck-stage section[data-deck-active] [data-pop]:nth-of-type(3){animation-delay:.95s}
+  deck-stage section[data-deck-active] [data-pop]:nth-of-type(4){animation-delay:1.1s}
+  deck-stage section[data-deck-active] [data-pop]:nth-of-type(5){animation-delay:1.25s}
+  [data-strike]{position:relative;display:inline-block;color:#9A9A93}
+  [data-strike]::after{content:"";position:absolute;left:-.04em;top:52%;height:.055em;background:#6366F1;border-radius:2px;width:calc(100% + .08em)}
+  deck-stage section[data-deck-active] [data-strike]::after{animation:deckStrike .8s 1.1s cubic-bezier(.2,.7,.3,1) both}
+  @media print{deck-stage section *{animation:none!important}deck-stage section [data-strike]::after{width:calc(100% + .08em)!important}}
+</style>
+</helmet>
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1920" height="1080" hint-size="100%,100%" data-uneditable="">
 
-  <!-- 0 TITLE -->
-  <div class="slide active" data-menu="Titel">
-    <div class="kicker">Vibe Coding Bootcamp · Finaler Check-In</div>
-    <img src="Brand/UIPrism-Logos/svg/UIPrism-Logo-Primary.svg" alt="UIPrism" style="width:min(64%,460px);height:auto;display:block;margin:0.1em 0 0.5em -6px;">
-    <div class="sub" style="font-size:1.05em;color:var(--ink);font-weight:600;">Map your UI, automatically.</div>
-    <div class="sub" style="margin-top:0.5em;">Ein Tool, das Wireframes, Screenshots, URLs und Repositories in ein konsistentes Designsystem übersetzt — gebaut mit KI.</div>
-    <div class="foot"><b>Robert Kraus</b> · UX/UI Designer</div>
+<section data-label="Titel" data-speaker-notes="0:45 — Leserichtung ist die Kausalkette: links die Behauptung, rechts meine Antwort darauf. Zuerst Zitat vorlesen, Pause. Dann: „Diese Ansage war der Auslöser — ich wollte wissen, ob sie stimmt.“ Erst danach Name, Rolle, ein Satz Branchen." style="display:grid;grid-template-columns:1fr 1fr">
+  <div style="background:#6366F1;color:#FFFFFF;padding:70px 86px 54px;display:flex;flex-direction:column;justify-content:space-between">
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#CBCDFC">Der Auslöser</span>
+    <div style="flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:flex-start;padding-top:150px;gap:24px">
+      <p data-punch="" style="font-weight:800;letter-spacing:-0.032em;line-height:1.04;font-size:58px;margin:0">„In 3 Monaten<br>macht das die KI.“</p>
+      <p style="font-size:23px;line-height:1.5;color:#DDDEFE;max-width:34em">Die Ansage: Features promptet man künftig selbst.<br>Designer und Entwickler seien bald überflüssig.</p>
+    </div>
+    <div style="flex:none;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.22);padding-top:19px;margin-top:26px;font-size:13px;color:#CBCDFC">
+      <span>Behauptung, die ich nicht glauben wollte</span><span style="font-variant-numeric:tabular-nums">1</span>
+    </div>
   </div>
+  <div style="background:#FBFBF9;color:#141418;padding:70px 86px 54px;display:flex;flex-direction:column;justify-content:space-between">
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9A9A93">Also habe ich es ausprobiert</span>
+    <div style="flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:flex-start;padding-top:150px;gap:24px">
+      <h2 data-punch="" style="font-weight:800;letter-spacing:-0.03em;line-height:1.04;font-size:58px;margin:0">Bauen<br>im Blindflug</h2>
+      <p style="font-size:23px;line-height:1.5;color:#6B6B64;max-width:34em">Fünf Wochen lang habe ich ein echtes Tool gebaut — ohne Terminal, ohne eine Zeile eigenen Code. Wie weit kommt ein Designer, wenn die KI alles baut?</p>
+    </div>
+    <div style="flex:none;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #E8E6E0;padding-top:19px;margin-top:26px;font-size:13px;color:#9A9A93">
+      <span>Robert Kraus · Senior UX/UI Designer</span><span style="font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#4A3AD1">UIPrism</span>
+    </div>
+  </div>
+</section>
 
-  <!-- 1 VORSTELLUNG -->
-  <div class="slide" data-menu="Vorstellung">
-    <div class="kicker">00 · Vorstellung</div>
-    <div class="intro-row">
-      <img class="avatar" src="robbie-portrait.jpg" alt="Robert Kraus">
-      <div>
-        <h1 style="margin-bottom:0.35em;">Designer. Kein Coder.</h1>
-        <div class="sub">Senior UX/UI Designer &amp; UX Design Consultant. SaaS, Cloud-Services, Automotive, Medical Devices, Web. Kann Code oberflächlich lesen, aber nicht schreiben.</div>
+<section data-label="Der Handel" data-speaker-notes="0:55 — Die drei Zahlen einzeln benennen, langsam. „Slave to the machine“ darf hier fallen — trocken, nicht als Klage. Das ist der Rahmen für alles Folgende." style="background:#FBFBF9;color:#141418;padding:70px 134px 54px;display:flex;flex-direction:column">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;flex:none">
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9A9A93">01 · Der Handel</span>
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#4A3AD1">UIPrism</span>
+  </div>
+  <div style="flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:26px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:65px">
+      <h1 style="font-weight:800;letter-spacing:-0.032em;line-height:1.02;font-size:80px;margin:0">Ich habe die Kontrolle<br>abgegeben.</h1>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:26px;flex:none;margin-right:110px">
+        <img src="./robbie-portrait-ms4seq60-o2qd.jpg" alt="Robert Kraus" style="width:240px;height:240px;border-radius:50%;object-fit:cover;display:block">
+        <p style="font-size:16px;line-height:1.4;color:#6B6B64;text-align:center;margin:0;max-width:260px">Versteht oberflächlich HTML,<br>JavaScript, JSON &amp; CSS —<br>kann sie aber nicht schreiben.</p>
+      </div>
+    </div>
+    <p style="font-size:23px;line-height:1.5;color:#6B6B64;max-width:34em">Nicht aus Versehen, sondern als Entscheidung. Alles über die KI, kein Terminal, keine Dev-Tools. Was ich dafür bekommen habe, war Tempo. Was ich dafür bezahlt habe, ist der Rest dieses Vortrags.</p>
+    <div data-anim="stagger" style="display:flex;gap:65px;flex-wrap:wrap">
+      <div><p style="font-weight:800;letter-spacing:-0.03em;line-height:.95;font-size:62px;color:#6366F1;margin:0">100+</p><p style="font-size:16px;line-height:1.35;color:#6B6B64;margin:8px 0 0">Freigaben für Dinge,<br>die ich nicht verstand</p></div>
+      <div><p style="font-weight:800;letter-spacing:-0.03em;line-height:.95;font-size:62px;margin:0">12–20</p><p style="font-size:16px;line-height:1.35;color:#6B6B64;margin:8px 0 0">Testruns von Hand,<br>bis ich aufgegeben habe</p></div>
+      <div><p style="font-weight:800;letter-spacing:-0.03em;line-height:.95;font-size:62px;margin:0">0</p><p style="font-size:16px;line-height:1.35;color:#6B6B64;margin:8px 0 0">Zeilen Code,<br>selbst geschrieben</p></div>
+    </div>
+  </div>
+  <div style="flex:none;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #E8E6E0;padding-top:19px;margin-top:26px;font-size:13px;color:#9A9A93">
+    <span>Bauen im Blindflug</span><span style="font-variant-numeric:tabular-nums">2</span>
+  </div>
+</section>
+
+<section data-label="Der Fall" data-speaker-notes="0:40 — Foto sprechen lassen. „Jede Seite sah anders aus.“ Nicht werten, nur zeigen. Letzter Satz ist die Testbedingung, keine Entschuldigung." style="background:#FBFBF9;color:#141418;padding:70px 134px 54px;display:flex;flex-direction:column">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;flex:none">
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9A9A93">02 · Der Fall</span>
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#4A3AD1">UIPrism</span>
+  </div>
+  <div style="display:grid;grid-template-columns:.9fr 1.1fr;gap:65px;align-items:center;flex:1 1 auto;min-height:0">
+    <div>
+      <h2 style="font-weight:800;letter-spacing:-0.03em;line-height:1.04;font-size:56px;margin:0">Jahrelanger Wildwuchs, kein System.</h2>
+      <p style="font-size:23px;line-height:1.5;color:#6B6B64;max-width:34em;margin:26px 0 0">Eine gewachsene SaaS-Software, in der jedes Feature seine eigene Handschrift trägt. Anforderungen gingen immer direkt von Chefetage und Kunden ins Development — ohne Design dazwischen, ohne System. Aufräumen soll das jetzt das Design.</p>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center">
+
+    <img src="./firefly_viel-weniger-notiztettel-fliegen-ms4txfhb-skch.png" alt="firefly_viel-weniger-notiztettel-fliegen" style="width:100%;max-height:820px;height:auto;object-fit:contain;display:block"></div>
+  </div>
+  <div style="flex:none;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #E8E6E0;padding-top:19px;margin-top:26px;font-size:13px;color:#9A9A93">
+    <span>Bauen im Blindflug</span><span style="font-variant-numeric:tabular-nums">3</span>
+  </div>
+</section>
+
+<section data-label="Das Produkt" data-speaker-notes="0:55 — Video läuft, nicht beschreiben was man sieht. Stattdessen: warum „Repo als Quelle“ die eigentliche Entscheidung war. Kurz halten — das Produkt ist nicht die Pointe." style="background:#6366F1;color:#FFFFFF;padding:70px 134px 54px;display:flex;flex-direction:column">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;flex:none">
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#CBCDFC">03 · Was entstanden ist</span>
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#CBCDFC">UIPrism</span>
+  </div>
+  <div style="display:grid;grid-template-columns:.82fr 1.18fr;gap:65px;align-items:center;flex:1 1 auto;min-height:0">
+    <div>
+      <h2 style="font-weight:800;letter-spacing:-0.03em;line-height:1.04;font-size:48px;margin:0">Screenshot rein,<br>Designsystem raus.</h2>
+      <p style="font-size:23px;line-height:1.5;color:#DDDEFE;max-width:34em;margin:24px 0 0">Neun Farben, fünf Schriftstile, drei Abstände — automatisch extrahiert und nach Figma gesynct. Das Repo ist die Quelle, nicht die Figma-Datei.</p>
+      <div data-anim="stagger" style="margin-top:44px;display:grid;grid-template-columns:auto auto auto auto auto;align-items:center;width:max-content">
+        <div style="border:1px solid rgba(255,255,255,.35);border-radius:10px;padding:14px 24px;font-weight:700;font-size:20px;color:#FFFFFF">Quelle/Img/URL/Repo</div>
+        <svg width="64" height="20" viewBox="0 0 64 20" fill="none" style="display:block">
+          <path d="M2 10 L 56 10" stroke="#CBCDFC" stroke-width="2"></path>
+          <path d="M50 4 L 60 10 L 50 16" stroke="#CBCDFC" stroke-width="2" fill="none"></path>
+        </svg>
+        <div style="background:#FFFFFF;color:#4A3AD1;border-radius:10px;padding:14px 24px;font-weight:800;font-size:20px;letter-spacing:.04em">UIPrism</div>
+        <svg width="96" height="130" viewBox="0 0 96 130" fill="none" style="display:block">
+          <path d="M4 65 C 40 65, 48 30, 84 30" stroke="#CBCDFC" stroke-width="2"></path>
+          <path d="M4 65 C 40 65, 48 100, 84 100" stroke="#CBCDFC" stroke-width="2"></path>
+          <path d="M78 24 L 88 30 L 78 36" stroke="#CBCDFC" stroke-width="2" fill="none"></path>
+          <path d="M78 94 L 88 100 L 78 106" stroke="#CBCDFC" stroke-width="2" fill="none"></path>
+        </svg>
+        <div style="display:flex;flex-direction:column;gap:22px">
+          <div style="border:1px solid rgba(255,255,255,.35);border-radius:10px;padding:14px 24px;font-weight:700;font-size:20px;color:#FFFFFF">Figma</div>
+          <div style="border:1px solid rgba(255,255,255,.35);border-radius:10px;padding:14px 24px;font-weight:700;font-size:20px;color:#FFFFFF">Storybook</div>
+        </div>
+      </div>
+    </div>
+    <div style="border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 18px 44px rgba(28,26,74,.30)">
+      <div style="background:#F4F3EF;padding:10px 17px;display:flex;gap:6px;border-bottom:1px solid #E3E1DB;line-height:0">
+        <i style="width:9px;height:9px;border-radius:50%;background:#D6D4CD;display:block"></i>
+        <i style="width:9px;height:9px;border-radius:50%;background:#D6D4CD;display:block"></i>
+        <i style="width:9px;height:9px;border-radius:50%;background:#D6D4CD;display:block"></i>
+      </div>
+      <div style="position:relative;aspect-ratio:16/9;background:#EEEDE7">
+        <p style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;margin:0;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:18px;line-height:1.6;color:#9A9A93;padding:40px">Demo-Video hier —<br>Datei „uiprism-demo-loop.mp4" ins Projekt laden</p>
+        <video src="./uploads/UIPrism_Ablauf_720p.mp4" autoplay="" muted="" loop="" playsinline="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block"></video>
       </div>
     </div>
   </div>
-
-  <!-- 2 AUSGANGSLAGE: PROMPT + POST-ITS -->
-  <div class="slide" data-menu="Ausgangslage · Prompt & Post-its">
-    <div class="kicker">01 · Ausgangslage</div>
-    <h1>Software aus dem Prompt — zusammengehalten von Post-its.</h1>
-    <div class="sub">KI-generierte Dashboard-Entwürfe, mit Post-its erklärt und ohne Designsystem gebaut — jede Seite sah anders aus.</div>
+  <div style="flex:none;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.22);padding-top:19px;margin-top:26px;font-size:13px;color:#CBCDFC">
+    <span>Für Designer in gewachsenen Produkten, die den Code nicht anfassen können</span><span style="font-variant-numeric:tabular-nums">4</span>
   </div>
+</section>
 
-  <!-- 3 WILDWUCHS -->
-  <div class="slide" data-menu="Ausgangslage · Wildwuchs">
-    <div class="kicker">01 · Ausgangslage</div>
-    <h1>Aus Tempo wird ein Fragment-Labyrinth.</h1>
-    <div class="sub">Man startet mit einer kleinen Vision — und Feature um Feature bleibt haften, bis ein Gebäude entsteht, in dem sich niemand mehr zurechtfindet. Kein System, keine Konsistenz.</div>
-    <div class="hero-svg">
-      <svg viewBox="0 0 720 214" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fragment-Labyrinth: mismatched UI-Fragmente türmen sich zu einem unübersichtlichen Klumpen.">
-        <!-- Labyrinth-Silhouette (Gebäude) hinter dem Klumpen -->
-        <g fill="none" stroke="#EAE8E2" stroke-width="2">
-          <rect x="356" y="34" width="300" height="150" rx="10"/>
-          <rect x="382" y="58" width="248" height="102" rx="8"/>
-          <rect x="408" y="82" width="196" height="54" rx="6"/>
-          <path d="M356 109 H408 M604 109 H656 M506 34 V58 M506 136 V184"/>
-        </g>
-        <!-- „Vision"-Pfad, der sich im Klumpen verliert -->
-        <path d="M150 118 C214 118 226 156 300 156 C340 156 360 140 388 132"
-              fill="none" stroke="#CFCCC4" stroke-width="2" stroke-dasharray="5 6" stroke-linecap="round"/>
+<section data-label="Tempo vs. Kontrolle" data-speaker-notes="1:05 — Der Kern-Slide der Bilanz. Links vollständig loben, ohne Einschränkung — sonst wirkt rechts wie eine Ausrede. Dann Seite wechseln, Tempo raus." style="display: grid; grid-template-columns: 1fr 1fr; position: relative">
+  <div style="background:#6366F1;color:#FFFFFF;padding:70px 86px 54px;display:flex;flex-direction:column;justify-content:space-between">
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#CBCDFC">Gekauft</span>
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:40px">
+        <p data-punch="" style="font-weight:800;letter-spacing:-0.035em;line-height:.94;font-size:124px;margin:0">Tempo</p>
+        <img data-punch="" src="./icon-tempolimit-v3.svg" alt="Tempolimit aufgehoben" style="width:150px;height:auto;display:block;flex:none">
+      </div>
+      <p style="font-size:23px;line-height:1.5;color:#DDDEFE;max-width:34em;margin:44px 0 0">Vom leeren Ordner zum laufenden Prototyp in fünf Wochen. Deploys, Repo, Figma-Sync — von der KI eingerichtet, während ich zusah.</p>
+    </div>
+    <div style="flex:none;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.22);padding-top:19px;margin-top:26px;font-size:13px;color:#CBCDFC">
+      <span>Das ist real und nicht zu relativieren</span><span style="font-variant-numeric:tabular-nums">5</span>
+    </div>
+  </div>
+  <div style="background:#FBFBF9;color:#141418;padding:70px 86px 54px;display:flex;flex-direction:column;justify-content:space-between">
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9A9A93">Bezahlt</span>
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:40px">
+        <p data-punch="" style="font-weight:800;letter-spacing:-0.035em;line-height:.94;font-size:124px;margin:0">Kontrolle</p>
+        <img data-punch="" src="./icon-blindflug-v3.svg" alt="Blindflug" style="width:150px;height:auto;display:block;flex:none">
+      </div>
+      <p style="font-size:23px;line-height:1.5;color:#6B6B64;max-width:34em;margin:44px 0 0">Freigaben für Begriffe, die mir nichts sagten. Fehler ohne nachvollziehbare Ursache. Prozesse beobachtet, die ich nicht verstehe — außer „panta rhei“. Kein Wissen, das bei mir hängen bleibt.</p>
+    </div>
+    <div style="flex:none;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #E8E6E0;padding-top:19px;margin-top:26px;font-size:13px;color:#9A9A93">
+      <span>Software ja, Kompetenz nein</span><span style="font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#4A3AD1">UIPrism</span>
+    </div>
+  </div>
+</section>
 
-        <!-- Tile-Helfer: Rechteck + Header-Bar + 2 Zeilen -->
-        <!-- A · die kleine, saubere Vision (aufrecht, links) -->
-        <g transform="translate(24,60)">
-          <rect width="120" height="94" rx="9" fill="#FFFFFF" stroke="#E0DED7" stroke-width="1.5"/>
-          <rect x="12" y="13" width="70" height="9" rx="4" fill="#6366F1"/>
-          <rect x="12" y="34" width="96" height="6" rx="3" fill="#E8E6DF"/>
-          <rect x="12" y="48" width="80" height="6" rx="3" fill="#E8E6DF"/>
-          <rect x="12" y="62" width="88" height="6" rx="3" fill="#E8E6DF"/>
-        </g>
-        <!-- B -->
-        <g transform="translate(252,38) rotate(-9)">
-          <rect width="122" height="92" rx="9" fill="#FFFFFF" stroke="#E0DED7" stroke-width="1.5"/>
-          <rect x="12" y="13" width="66" height="9" rx="4" fill="#06B6D4"/>
-          <rect x="12" y="34" width="94" height="6" rx="3" fill="#E8E6DF"/>
-          <rect x="12" y="48" width="72" height="6" rx="3" fill="#E8E6DF"/>
-        </g>
-        <!-- C -->
-        <g transform="translate(320,104) rotate(12)">
-          <rect width="106" height="80" rx="9" fill="#F4F3EF" stroke="#E0DED7" stroke-width="1.5"/>
-          <rect x="11" y="12" width="58" height="9" rx="4" fill="#F59E0B"/>
-          <rect x="11" y="32" width="82" height="6" rx="3" fill="#E8E6DF"/>
-          <rect x="11" y="45" width="64" height="6" rx="3" fill="#E8E6DF"/>
-        </g>
-        <!-- D -->
-        <g transform="translate(408,30) rotate(6)">
-          <rect width="128" height="98" rx="9" fill="#FFFFFF" stroke="#E0DED7" stroke-width="1.5"/>
-          <rect x="13" y="14" width="74" height="9" rx="4" fill="#E3E1DA"/>
-          <rect x="13" y="36" width="100" height="6" rx="3" fill="#E8E6DF"/>
-          <rect x="13" y="50" width="84" height="6" rx="3" fill="#E8E6DF"/>
-          <rect x="13" y="64" width="92" height="6" rx="3" fill="#E8E6DF"/>
-        </g>
-        <!-- E -->
-        <g transform="translate(474,86) rotate(-15)">
-          <rect width="104" height="82" rx="9" fill="#FFFFFF" stroke="#E0DED7" stroke-width="1.5"/>
-          <rect x="11" y="12" width="56" height="9" rx="4" fill="#10B981"/>
-          <rect x="11" y="33" width="80" height="6" rx="3" fill="#E8E6DF"/>
-          <rect x="11" y="47" width="60" height="6" rx="3" fill="#E8E6DF"/>
-        </g>
-        <!-- F -->
-        <g transform="translate(548,44) rotate(17)">
-          <rect width="116" height="90" rx="9" fill="#F4F3EF" stroke="#E0DED7" stroke-width="1.5"/>
-          <rect x="12" y="13" width="62" height="9" rx="4" fill="#EC4899"/>
-          <rect x="12" y="34" width="90" height="6" rx="3" fill="#E8E6DF"/>
-          <rect x="12" y="48" width="70" height="6" rx="3" fill="#E8E6DF"/>
-        </g>
-        <!-- G · kleines Fragment, das oben aufliegt -->
-        <g transform="translate(360,132) rotate(-7)">
-          <rect width="84" height="60" rx="8" fill="#FFFFFF" stroke="#E0DED7" stroke-width="1.5"/>
-          <rect x="10" y="11" width="46" height="8" rx="4" fill="#6366F1"/>
-          <rect x="10" y="29" width="62" height="5" rx="2.5" fill="#E8E6DF"/>
-        </g>
+<section data-label="Drei Entscheidungen" data-speaker-notes="1:10 — Die drei Entscheidungen sind eine Bewegung in drei Schritten: erst Kontext, dann Prüfung, dann Kontrolle. Jede war rational. Zusammen ergeben sie den Blindflug." style="background:#FBFBF9;color:#141418;padding:70px 134px 54px;display:flex;flex-direction:column">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;flex:none">
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9A9A93">04 · Wie ich dahin kam</span>
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#4A3AD1">UIPrism</span>
+  </div>
+  <div style="flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:26px">
+    <h2 style="font-weight:800;letter-spacing:-0.03em;line-height:1.04;font-size:56px;margin:0">Drei Entscheidungen — <span style="color:#6366F1">jede eine Abgabe.</span></h2>
+    <div data-anim="stagger" style="display:flex;flex-direction:column;margin-top:40px">
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:31px;align-items:baseline;padding:23px 0">
+        <span style="font-weight:800;font-size:22px;color:#6366F1;font-variant-numeric:tabular-nums;letter-spacing:-.02em">01</span>
+        <p style="font-size:21px;line-height:1.4;margin:0"><b style="font-weight:700">Sessions geschnitten, Kontext an die KI delegiert.</b> <span style="color:#6B6B64">Bei ~30 % Rest schreibt sie ihr eigenes Übergabedokument. Die nächste Session startet darauf.</span></p>
+      </div>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:31px;align-items:baseline;padding:23px 0;border-top:1px solid #E8E6E0">
+        <span style="font-weight:800;font-size:22px;color:#6366F1;font-variant-numeric:tabular-nums;letter-spacing:-.02em">02</span>
+        <p style="font-size:21px;line-height:1.4;margin:0"><b style="font-weight:700">Das Testen abgegeben.</b> <span style="color:#6B6B64">Nach 12–20 Handruns durch den Figma-Loop: „Du hast den MCP — teste selbst.“ Ab da verlässt der Mensch die Schleife.</span></p>
+      </div>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:31px;align-items:baseline;padding:23px 0;border-top:1px solid #E8E6E0">
+        <span style="font-weight:800;font-size:22px;color:#6366F1;font-variant-numeric:tabular-nums;letter-spacing:-.02em">03</span>
+        <p style="font-size:21px;line-height:1.4;margin:0"><b style="font-weight:700">Auf Auto gestellt.</b> <span style="color:#6B6B64">Aufgehört, Freigaben zu prüfen. Von da an war der Prozess schnell und für mich vollständig blind.</span></p>
+      </div>
+    </div>
+  </div>
+  <div style="flex:none;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #E8E6E0;padding-top:19px;margin-top:26px;font-size:13px;color:#9A9A93">
+    <span>Bauen im Blindflug</span><span style="font-variant-numeric:tabular-nums">6</span>
+  </div>
+</section>
+
+<section data-label="Der zweite Preis" data-speaker-notes="0:55 — Links: ein bis zwei Sätze, Pause, nicht therapeutisch werden. Dann rechts der Umschwung: „Ich habe geprüft, ob das an mir liegt. Tut es nicht.“ Zitat übersetzen: die Last, herauszufinden was funktioniert, liegt bei jedem einzelnen Nutzer. Genau das habe ich fünf Wochen gemacht." style="display:grid;grid-template-columns:1fr 1fr">
+  <div style="background:#6366F1;color:#FFFFFF;padding:70px 86px 54px;display:flex;flex-direction:column;justify-content:space-between">
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#CBCDFC">05 · Der zweite Preis</span>
+    <div data-anim="stagger">
+      <p style="font-size:21px;line-height:1.6;color:#CBCDFC;font-style:italic;margin:0 0 22px">Marinating… Undulating… Percolating… Ruminating… Noodling…</p>
+      <h2 style="font-weight:800;letter-spacing:-0.03em;line-height:1.04;font-size:44px;margin:0">Es macht auch etwas<br>mit einem.</h2>
+      <p style="font-size:23px;line-height:1.5;color:#DDDEFE;max-width:34em;margin:24px 0 0">Die Art, wie ich irgendwann mit der Maschine gesprochen habe, hat mir keinen Spaß gemacht. Das steht in keinem Bericht über KI-Produktivität.</p>
+      <p style="font-size:23px;line-height:1.5;color:#DDDEFE;max-width:34em;margin:56px 0 0">Tipp am Rande: Kauft euch ein gutes Mikrofon.<br>Erspart einem die eigene cholerische Seite.</p>
+      <p style="font-weight:800;font-size:72px;line-height:1;color:#FFFFFF;margin:70px 0 0;letter-spacing:-.02em">;)</p>
+    </div>
+    <div style="flex:none;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.22);padding-top:19px;margin-top:26px;font-size:13px;color:#CBCDFC">
+      <span>Kein Wissensaufbau · unklare Fehler</span><span style="font-variant-numeric:tabular-nums">7</span>
+    </div>
+  </div>
+  <div style="background:#FBFBF9;color:#141418;padding:70px 86px 54px;display:flex;flex-direction:column;justify-content:space-between">
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9A9A93">Kein persönliches Defizit</span>
+    <div style="flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:flex-start;padding-top:168px">
+      <div data-anim="stagger" style="display:flex;flex-direction:column">
+        <div style="padding:23px 0">
+          <p style="font-size:21px;line-height:1.4;margin:0"><b style="font-weight:700">„Die Last, herauszufinden was funktioniert, liegt bei jedem einzelnen Nutzer.“</b><br><span style="color:#6B6B64">Amelia Wattenberger, GitHub Next — <i>Why Chatbots Are Not the Future</i></span><br><span style="font-size:15px;color:#9A9A93">wattenberger.com/thoughts/boo-chatbots</span></p>
+        </div>
+        <div style="padding:23px 0;border-top:1px solid #E8E6E0">
+          <p style="font-size:21px;line-height:1.4;margin:0"><b style="font-weight:700">Blanke Prompt-Felder sind schwer nutzbar</b> <span style="color:#6B6B64">— KI-Chat löst nicht jedes Nutzerbedürfnis. Nielsen Norman Group, <i>AI Chat Is Not (Always) the Answer</i> · Folgeartikel 2026: <i>Less Chat, More Answer</i></span><br><span style="font-size:15px;color:#9A9A93">nngroup.com/articles/ai-chat-not-the-answer</span></p>
+        </div>
+        <div style="padding:23px 0;border-top:1px solid #E8E6E0">
+          <p style="font-size:21px;line-height:1.4;margin:0"><b style="font-weight:700">Das Prompt-Paradigma scheitert an klassischen Usability-Kriterien</b> <span style="color:#6B6B64">— Lernbarkeit, Effizienz, Fehlertoleranz. UX Collective</span><br><span style="font-size:15px;color:#9A9A93">UX Collective · <i>The usability problem with prompt-driven AI</i></span></p>
+        </div>
+      </div>
+    </div>
+    <div style="flex:none;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #E8E6E0;padding-top:19px;margin-top:26px;font-size:13px;color:#9A9A93">
+      <span>Ein dokumentiertes Muster, kein Einzelfall</span><span style="font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#4A3AD1">UIPrism</span>
+    </div>
+  </div>
+</section>
+
+<section data-label="Die Diagnose" data-speaker-notes="1:15 — niemals kürzen. Hier kippt die Erklärung: Ich musste so viel abgeben, weil das Interface mir keine andere Wahl ließ. Maler-Analogie erzählen: Gestalten heißt ständig zwischen Machen und Bewerten wechseln — der Chat erzwingt den Wechsel bei jedem Schritt, dadurch kein Flow. Nuance sauber setzen: die Kritik lautet nicht „KI ist für Designer unmöglich“, sondern der Chat passt schlecht zu visuellem, breitem Arbeiten — heute. Pause vor dem Wechsel." style="display:grid;grid-template-columns:1fr 1fr">
+  <div style="background:#6366F1;color:#FFFFFF;padding:70px 86px 54px;display:flex;flex-direction:column;justify-content:space-between">
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#CBCDFC">Wie Designer denken</span>
+    <div>
+      <p data-punch="" style="font-weight:800;letter-spacing:-0.035em;line-height:.94;font-size:96px;margin:0">In die<br>Breite</p>
+      <p style="font-size:23px;line-height:1.5;color:#DDDEFE;max-width:34em;margin:24px 0 0">Optionen nebeneinander.<br>Zeigen statt beschreiben.<br>Vergleichen.</p>
+      <svg width="420" height="150" viewBox="0 0 420 150" style="display:block;margin-top:80px">
+        <path data-draw="" style="--len:460" d="M10 60 L110 10 L210 60 L110 110 Z" fill="rgba(255,255,255,.12)" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"></path>
+        <path data-draw="" style="--len:460" d="M210 60 L310 10 L410 60 L310 110 Z" fill="rgba(255,255,255,.12)" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"></path>
+        <circle data-pop="" cx="10" cy="60" r="8" fill="#FFFFFF"></circle>
+        <circle data-pop="" cx="210" cy="60" r="8" fill="#FFFFFF"></circle>
+        <circle data-pop="" cx="410" cy="60" r="8" fill="#FFFFFF"></circle>
+        <text x="60" y="140" text-anchor="middle" font-size="14" fill="#CBCDFC" font-family="Inter,Arial,sans-serif" letter-spacing=".06em">DISCOVER</text>
+        <text x="160" y="140" text-anchor="middle" font-size="14" fill="#CBCDFC" font-family="Inter,Arial,sans-serif" letter-spacing=".06em">DEFINE</text>
+        <text x="260" y="140" text-anchor="middle" font-size="14" fill="#CBCDFC" font-family="Inter,Arial,sans-serif" letter-spacing=".06em">DEVELOP</text>
+        <text x="360" y="140" text-anchor="middle" font-size="14" fill="#CBCDFC" font-family="Inter,Arial,sans-serif" letter-spacing=".06em">DELIVER</text>
       </svg>
     </div>
-    <div class="hero-cap">Aus einer kleinen Vision (links) wird ein Klumpen mismatched Fragmente — kein System, keine Konsistenz.</div>
-  </div>
-
-  <!-- 4 AUSLÖSER (dark) -->
-  <div class="slide dark" data-menu="Der Auslöser">
-    <img class="brandmark" src="Brand/UIPrism-Logos/svg/UIPrism-Mark-White.svg" alt="UIPrism">
-    <div class="kicker">02 · Der Auslöser</div>
-    <h1>„In 3 Monaten macht das die KI."</h1>
-    <div class="sub">Die Ansage der Geschäftsführung: 50 Entwicklerstellen, Designer und Coder bald überflüssig — Features promptet man selbst. Datenschutz und Sicherheit? Für die GF ein Randthema.</div>
-  </div>
-
-  <!-- 5 REAKTION -->
-  <div class="slide" data-menu="Die Reaktion">
-    <div class="kicker">03 · Die Reaktion</div>
-    <h1>Aufräumen bei laufendem Betrieb.</h1>
-    <div class="sub">Zwei Aufgaben zugleich: fünf Jahre Wildwuchs bändigen und den KI-Input auf ein konsistentes Designsystem bringen. Daraus wurde UIPrism.</div>
-  </div>
-
-  <!-- 6 IDEE -->
-  <div class="slide" data-menu="Die Idee">
-    <div class="kicker">04 · Die Idee</div>
-    <h1>Wireframe rein — konsistentes Design raus.</h1>
-    <div class="sub">Liest Screenshots, Wireframes und Repositories, nutzt das Repo als Single Source of Truth und synct nach Figma.</div>
-    <div class="flow">
-      <span class="chip">Screenshot · Wireframe · Repo</span>
-      <span class="arrow">→</span>
-      <span class="chip acc">UIPrism</span>
-      <span class="arrow">→</span>
-      <span class="chip">Figma-Designsystem</span>
+    <div style="flex:none;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.22);padding-top:19px;margin-top:26px;font-size:13px;color:#CBCDFC">
+      <span>Wattenbergers Maler-Analogie: gutes Werkzeug lässt dich wählen, wann du machst und wann du bewertest</span><span style="font-variant-numeric:tabular-nums">8</span>
     </div>
-    <div class="shots">
-      <figure>
-        <img src="Screenshots/uiprism-app-dashboard-crop.jpg" alt="UIPrism – Dashboard-Ansicht des Live-Prototyps">
-        <figcaption>Dashboard: Quellen einlesen &amp; verwalten</figcaption>
-      </figure>
-      <figure>
-        <img src="Screenshots/uiprism-app-tokens-crop.jpg" alt="UIPrism – automatisch extrahierte Design-Tokens (Farben, Typografie)">
-        <figcaption>Tokens: Farbe, Typo &amp; Spacing automatisch extrahiert</figcaption>
-      </figure>
+  </div>
+  <div style="background:#FBFBF9;color:#141418;padding:70px 86px 54px;display:flex;flex-direction:column;justify-content:space-between">
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9A9A93">Was der Chat erlaubt</span>
+    <div>
+      <p data-punch="" style="font-weight:800;letter-spacing:-0.035em;line-height:.94;font-size:96px;margin:0">In die<br>Lääänge</p>
+      <p style="font-size:23px;line-height:1.5;color:#6B6B64;max-width:34em;margin:24px 0 0">Eins nach dem anderen.<br>Erinnern statt sehen. Beschreiben statt zeigen.<br>Kein Nebeneinander, kein Vergleich.</p>
+      <svg width="420" height="150" viewBox="0 0 420 150" style="display:block;margin-top:80px;overflow:visible">
+        <line data-draw="" style="--len:400" x1="10" y1="60" x2="410" y2="60" stroke="#C9C7BF" stroke-width="3"></line>
+        <circle data-pop="" cx="10" cy="60" r="8" fill="#6366F1"></circle>
+        <circle data-pop="" cx="110" cy="60" r="8" fill="#6366F1"></circle>
+        <circle data-pop="" cx="210" cy="60" r="8" fill="#6366F1"></circle>
+        <circle data-pop="" cx="310" cy="60" r="8" fill="#6366F1"></circle>
+        <circle data-pop="" cx="410" cy="60" r="8" fill="#6366F1"></circle>
+        <text x="10" y="140" text-anchor="middle" font-size="14" fill="#9A9A93" font-family="Inter,Arial,sans-serif" letter-spacing=".06em">EINS</text>
+        <text x="110" y="140" text-anchor="middle" font-size="14" fill="#9A9A93" font-family="Inter,Arial,sans-serif" letter-spacing=".06em">NACH</text>
+        <text x="210" y="140" text-anchor="middle" font-size="14" fill="#9A9A93" font-family="Inter,Arial,sans-serif" letter-spacing=".06em">DEM</text>
+        <text x="310" y="140" text-anchor="middle" font-size="14" fill="#9A9A93" font-family="Inter,Arial,sans-serif" letter-spacing=".06em">AN</text>
+        <text x="410" y="140" text-anchor="middle" font-size="14" fill="#9A9A93" font-family="Inter,Arial,sans-serif" letter-spacing=".06em">DEREN</text>
+      </svg>
     </div>
-    <div class="shot-cap" style="margin-top:0.6em;">Live-Prototyp: von der eingelesenen Quelle zum konsistenten Token-Set.</div>
-  </div>
-
-  <!-- 7 HYPOTHESE -->
-  <div class="slide" data-menu="Hypothese & Ergebnis">
-    <div class="kicker">05 · Hypothese & Ergebnis</div>
-    <h1>Die Wette: ohne eine Zeile Code baubar.</h1>
-    <div class="result">
-      <div><span class="yes">Als Prototyp — ja.</span></div>
-      <div><span class="no">Als wartbares Produkt — nein.</span></div>
+    <div style="flex:none;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #E8E6E0;padding-top:19px;margin-top:26px;font-size:13px;color:#9A9A93">
+      <span>Der Engpass war nicht mein fehlendes Code-Wissen</span><span style="font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#4A3AD1">UIPrism</span>
     </div>
-    <div class="sub" style="margin-top:1.2em;">Mein Denkwandel: Es lag nicht an der Idee, sondern an der Übergabe an mich. Mit KI entsteht schnell Beeindruckendes — aber ohne Code-Verständnis bleibt es fremdgesteuert.</div>
   </div>
+</section>
 
-  <!-- 8 JOURNEY 1/2 -->
-  <div class="slide" data-menu="Journey · Was ich weggelassen habe">
-    <div class="kicker">06 · Die Journey (1/2)</div>
-    <h1>Kein Terminal. Alles über die KI.</h1>
-    <div class="sub">Bewusst weggelassen, was mich überfordert — Terminal und klassische Dev-Tools. Stattdessen alles über Claude &amp; Claude Code, per MCP an Miro, GitHub und Figma angebunden. Automatisiert, was ging.</div>
+<section data-label="Antwort" data-speaker-notes="1:10 — Bogen schließt sich auf Slide 1. Keine Wertung über die GF — die Bilanz spricht. Stufen zügig, keine Vision-Rhetorik." style="background:#FBFBF9;color:#141418;padding:70px 134px 54px;display:flex;flex-direction:column">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;flex:none">
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9A9A93">06 · Antwort &amp; nächster Schritt</span>
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#4A3AD1">UIPrism</span>
   </div>
-
-  <!-- 9 JOURNEY 2/2 -->
-  <div class="slide" data-menu="Journey · Der Preis">
-    <div class="kicker">06 · Die Journey (2/2)</div>
-    <h1>Alles automatisiert — der Preis ist Blindflug.</h1>
-    <div class="sub">Der Entwicklungsprozess liegt komplett bei der KI, ich greife kaum ein. Schnelle Ergebnisse, aber intransparent: unzählige Iterationen, unklare Fehler — und mein eigener Lernfaktor bleibt gering. Genau daher meine Unruhe.</div>
-  </div>
-
-  <!-- 9 THESE (dark) -->
-  <div class="slide dark" data-menu="★ These: Bauen mit KI">
-    <img class="brandmark" src="Brand/UIPrism-Logos/svg/UIPrism-Mark-White.svg" alt="UIPrism">
-    <div class="kicker">07 · Bauen mit KI · ★ Herzstück</div>
-    <h1>Chat ist das falsche Interface für Designer.</h1>
-    <div class="sub">Design-Denken ist visuell und geht in die Breite — Wireframes, Pläne, zunehmende Detailtiefe. Ein Textchat erzwingt eine lineare Abfolge. Genau da liegt der Bruch.</div>
-    <div class="beleg">Damit nicht allein: Amelia Wattenberger (GitHub Next) &amp; Nielsen Norman Group argumentieren dasselbe. Es geht um Interface-Passung — nicht darum, dass KI für Designer „unmöglich" wäre.</div>
-  </div>
-
-  <!-- 10 VISION -->
-  <div class="slide" data-menu="Vision & Next Steps">
-    <div class="kicker">08 · Vision & Next Steps</div>
-    <h1>Die Idee trägt. Die Umsetzung braucht Code-Tiefe.</h1>
-    <div class="sub">Nächster Schritt evtl. Übergabe an Entwickler-Hand; Weg: klein testen → Open Source → bottom-up → Enterprise.</div>
-  </div>
-
-  <!-- 11 Q&A -->
-  <div class="slide" data-menu="Q&A">
-    <div class="kicker">Q&A</div>
-    <h1>Fragen?</h1>
-    <div class="qs">
-      <div class="q"><b>1.</b> Wie erlebt ihr das Gefühl, dass die KI schneller baut, als ihr folgen könnt?</div>
-      <div class="q"><b>2.</b> Würdet ihr ein KI-Projekt je an jemanden mit Code-Skills abgeben — oder nie aus der Hand?</div>
+  <div style="flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:26px">
+    <p style="font-weight:800;letter-spacing:-0.032em;line-height:1.04;font-size:68px;margin:0"><span data-strike="">„In 3 Monaten macht das die KI.“</span></p>
+    <h2 style="font-weight:800;letter-spacing:-0.03em;line-height:1.04;font-size:50px;margin:0">Bauen: Ja.<br>Verantworten, übergeben, betreiben: Nein.</h2>
+    <p style="font-size:23px;line-height:1.5;color:#6B6B64;max-width:34em">Gestrichen werden gerade die Stellen, die den zweiten Teil erledigt haben. Und was sich in meinem Denken geändert hat: Ich dachte, mir fehlt Code-Wissen. Tatsächlich fehlte ein Interface, das arbeiten lässt, wie Designer arbeiten: komparativ, im Vergleich — mit einem LLM-Chat kaum möglich.</p>
+    <div data-anim="stagger" style="display:flex;align-items:flex-start;gap:20px;width:960px">
+      <div style="flex:0 0 130px"><p style="font-weight:800;letter-spacing:-0.03em;line-height:.95;font-size:34px;color:#6366F1;margin:0">01</p><p style="font-size:16px;line-height:1.35;color:#6B6B64;margin:8px 0 0">Klein testen<br><b style="font-weight:700;color:#141418">Hier stehen wir</b></p></div>
+      <div style="flex:1;height:3px;background:#C9C7BF;margin-top:15px"></div>
+      <div style="flex:0 0 130px"><p style="font-weight:800;letter-spacing:-0.03em;line-height:.95;font-size:34px;color:#9A9A93;margin:0">02</p><p style="font-size:16px;line-height:1.35;color:#6B6B64;margin:8px 0 0">Open Source</p></div>
+      <div style="flex:1;height:3px;background:#C9C7BF;margin-top:15px"></div>
+      <div style="flex:0 0 130px"><p style="font-weight:800;letter-spacing:-0.03em;line-height:.95;font-size:34px;color:#9A9A93;margin:0">03</p><p style="font-size:16px;line-height:1.35;color:#6B6B64;margin:8px 0 0">Bottom-up</p></div>
+      <div style="flex:1;height:3px;background:#C9C7BF;margin-top:15px"></div>
+      <div style="flex:0 0 130px"><p style="font-weight:800;letter-spacing:-0.03em;line-height:.95;font-size:34px;color:#9A9A93;margin:0">04</p><p style="font-size:16px;line-height:1.35;color:#6B6B64;margin:8px 0 0">Enterprise</p></div>
     </div>
-    <div class="links">
-      <a class="link" data-link="live" href="#" target="_blank">Live</a>
-      <a class="link" data-link="repo" href="#" target="_blank">Repo</a>
-      <a class="link" data-link="onepager" href="#" target="_blank">One-Pager</a>
-      <a class="link" data-link="linkedin" href="#" target="_blank">LinkedIn</a>
-    </div>
-    <div class="foot">Danke fürs Zuhören.</div>
   </div>
+  <div style="flex:none;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #E8E6E0;padding-top:19px;margin-top:26px;font-size:13px;color:#9A9A93">
+    <span>Nächster Schritt: Übergabe an eine Hand, die Code schreibt</span><span style="font-variant-numeric:tabular-nums">9</span>
+  </div>
+</section>
 
-</div>
+<section data-label="Q&amp;A" data-speaker-notes="0:15 — „Zwei Fragen, die mich selbst umtreiben — gern auch an euch.“ Links in den Meet-Chat posten, nicht vorlesen. Repo-Chip ergänzen, sobald das Repo öffentlich ist." style="background:#6366F1;color:#FFFFFF;padding:70px 134px 54px;display:flex;flex-direction:column">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;flex:none">
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#CBCDFC">Q&amp;A · 5 Minuten</span>
+    <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#CBCDFC">UIPrism</span>
+  </div>
+  <div style="flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:26px">
+    <h1 data-punch="" style="font-weight:800;letter-spacing:-0.032em;line-height:1.02;font-size:100px;margin:0">Fragen?</h1>
+    <div data-anim="stagger" style="display:flex;flex-direction:column;gap:32px;max-width:32em">
+      <p style="display:grid;grid-template-columns:auto 1fr;gap:23px;align-items:baseline;font-size:28px;font-weight:600;line-height:1.35;margin:0"><em style="font-style:normal;font-weight:800;color:#CBCDFC">1</em><span>Woran merkt ihr, dass die KI an euch vorbeigebaut hat — und wie schnell?</span></p>
+      <p style="display:grid;grid-template-columns:auto 1fr;gap:23px;align-items:baseline;font-size:28px;font-weight:600;line-height:1.35;margin:0"><em style="font-style:normal;font-weight:800;color:#CBCDFC">2</em><span>Wie viel Kontrolle gebt ihr ab, bevor es euch unangenehm wird?</span></p>
+    </div>
+    <div data-anim="stagger" style="display:flex;gap:13px;flex-wrap:wrap;margin-top:150px">
+      <span style="border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.5em 1.15em;font-size:15px;color:#DDDEFE"><b style="color:#fff">Live</b> · designbridge-production.up.railway.app</span>
+      <span style="border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.5em 1.15em;font-size:15px;color:#DDDEFE"><b style="color:#fff">One-Pager</b> · uiprism.netlify.app</span>
+      <span style="border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.5em 1.15em;font-size:15px;color:#DDDEFE"><b style="color:#fff">LinkedIn</b> · Robert Kraus</span>
+    </div>
+  </div>
+  <div style="flex:none;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.22);padding-top:19px;margin-top:26px;font-size:13px;color:#CBCDFC">
+    <span>Robert Kraus · Senior UX/UI Designer</span><span style="font-variant-numeric:tabular-nums">10</span>
+  </div>
+</section>
 
-<button class="fsbtn" id="fsBtn" title="Vollbild">⛶</button>
-<div class="chrome">
-  <button class="navbtn" id="prevBtn">‹</button>
-  <div class="dots" id="dots"></div>
-  <button class="navbtn" id="nextBtn">›</button>
-  <span class="counter" id="counter"></span>
-</div>
-
-<script>
-  const LINKS = {
-    live: "https://designbridge-production.up.railway.app/",
-    repo: "https://github.com/robbiekraus/designbridge",
-    onepager: "https://uiprism.netlify.app",
-    linkedin: "https://www.linkedin.com/in/robert-kraus-uxuidesign/"
-  };
-  const slides = Array.from(document.querySelectorAll('.slide'));
-  let idx = 0;
-  function applyLinks(){
-    document.querySelectorAll('[data-link]').forEach(el=>{
-      const url = LINKS[el.getAttribute('data-link')];
-      if(url){ el.href=url; el.classList.add('active'); }
-      else { el.removeAttribute('href'); el.style.opacity=.45; }
-    });
-  }
-  function build(){
-    const d=document.getElementById('dots');
-    slides.forEach((s,i)=>{
-      const dot=document.createElement('div');dot.className='dot';
-      dot.addEventListener('click',()=>show(i));d.appendChild(dot);
-    });
-  }
-  function show(i){
-    idx=Math.max(0,Math.min(slides.length-1,i));
-    slides.forEach((s,j)=>s.classList.toggle('active',j===idx));
-    document.querySelectorAll('.dot').forEach((d,j)=>d.classList.toggle('active',j===idx));
-    document.getElementById('counter').textContent=(idx+1)+' / '+slides.length;
-  }
-  document.getElementById('prevBtn').addEventListener('click',()=>show(idx-1));
-  document.getElementById('nextBtn').addEventListener('click',()=>show(idx+1));
-  document.getElementById('fsBtn').addEventListener('click',()=>{
-    if(!document.fullscreenElement) document.documentElement.requestFullscreen();
-    else document.exitFullscreen();
-  });
-  document.addEventListener('keydown',e=>{
-    if(['ArrowRight',' ','PageDown'].includes(e.key)) show(idx+1);
-    else if(['ArrowLeft','PageUp'].includes(e.key)) show(idx-1);
-  });
-  build();applyLinks();show(0);
-</script>
+</x-import>
+</x-dc>
 </body>
 </html>
