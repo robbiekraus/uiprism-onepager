@@ -1,0 +1,73 @@
+WEBVTT
+
+00:00.800 --> 00:04.200
+UIPrism takes a screenshot, URL, repo or Figma file as input
+
+00:04.700 --> 00:07.800
+The starting point is a screenshot of an existing interface
+
+00:09.400 --> 00:13.400
+Here: a finished sustainability dashboard
+
+00:14.300 --> 00:18.200
+Import by drag and drop
+
+00:19.000 --> 00:22.400
+The AI reads out colors, typography, spacing and components
+
+00:22.900 --> 00:25.600
+Import complete: 23 tokens, 19 components
+
+00:26.100 --> 00:30.000
+The tokens: colors, typography, spacing, radius, shadows
+
+00:30.500 --> 00:34.300
+Then the components, atoms first
+
+00:34.900 --> 00:39.000
+Each component with its origin in the layout and its mapping to shadcn/ui
+
+00:39.600 --> 00:43.600
+Preview directly in the list
+
+00:44.200 --> 00:47.600
+Atoms, molecules, organisms, templates
+
+00:48.000 --> 00:50.000
+… with ready-to-use JSX code
+
+00:50.500 --> 00:54.200
+Targets: Figma, Storybook or the whole library
+
+00:54.700 --> 00:58.200
+An empty Figma file, plus the UIPrism plugin
+
+00:58.700 --> 01:03.100
+Scan and export: color and text styles are created
+
+01:03.600 --> 01:08.800
+The components are created directly in the file
+
+01:09.300 --> 01:14.900
+Atoms, molecules and organisms as real Figma components
+
+01:15.400 --> 01:20.900
+… and assemble into the dashboard layout
+
+01:21.400 --> 01:27.900
+Done: 10 colors, 5 text styles, 19 components, 1 template
+
+01:28.700 --> 01:31.900
+One click: “Open in Storybook”
+
+01:32.400 --> 01:36.900
+Storybook with all detected components
+
+01:37.400 --> 01:42.600
+Every component with variants and controls
+
+01:43.200 --> 01:49.800
+Up to the finished dashboard template in the browser
+
+01:50.100 --> 01:55.800
+One screenshot → design tokens, code, Figma library and Storybook

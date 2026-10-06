@@ -4,7 +4,7 @@ Leichtgewichtiges Brand-System, damit Deck, One-Pager und App-Optik aus einem Gu
 
 ## ✅ Festgelegt (verbindlich)
 - **Name:** UIPrism — gesetzt.
-- **Logo:** `uiprism-logo.svg` (Prisma → Spektrum + Wortmarke) — gesetzt.
+- **Logo (Stand 06.10.2026):** Marke `assets/brand/uiprism-mark.svg` — Prisma als Kontur, ein einfallender Strahl, vier gebrochene Strahlen in Indigo-Abstufungen. Wortmarke „UI" Ink + „Prism" Indigo in Plex Sans 600. Dunkle Variante `uiprism-mark-onDark.svg`. Ersetzt die frühere Spektrum-Marke.
 - **Art-Direction-Richtung:** A · „Clarity" (hell, freundlich, SaaS; Indigo-Akzent, Spektrum sparsam) — gewählt.
 - **Tagline:** Map your UI, automatically.
 - **Sprecher:** Robert Kraus.
@@ -26,16 +26,17 @@ Leichtgewichtiges Brand-System, damit Deck, One-Pager und App-Optik aus einem Gu
 | --- | --- |
 | Ink (Text) | `#141418` |
 | Sekundärtext | `#5B5B66` |
-| Primär-Akzent (Indigo) | `#6366F1` |
+| Primär-Akzent (Indigo) | `#6366F1` (nur Grafik/Flächen) · `#4F46E5` für Text und Links (6,6:1 auf Hintergrund) |
 | Hintergrund hell | `#FAFAF9` |
 | Statement dunkel | `#0E0E11` |
 | Spektrum (nur sparsam: Logo + 1 Hairline) | Indigo `#6366F1` · Cyan `#06B6D4` · Grün `#10B981` · Amber `#F59E0B` · Pink `#EC4899` |
 
-**Regel:** Indigo trägt die Marke. Das volle Spektrum wird **sparsam** eingesetzt (Logo, eine feine Trennlinie, evtl. Progress-Dots) — nie flächig, damit es edel bleibt.
+**Regel:** Indigo trägt die Marke. Das volle Spektrum kommt auf der Website **nur in der Prisma-Grafik im Hero** vor (Entscheidung Rob, 06.10.2026), sonst nirgends. Logo und UI bleiben Indigo-Abstufungen.
 
-## Typografie
-- Eine Grotesk (Inter / System-Stack). Headline Bold (800), Body Regular.
-- Enges Tracking auf großen Headlines.
+## Typografie (Stand 06.10.2026, Website)
+- **IBM Plex Sans** (400/500/600) für Text und Headlines, **IBM Plex Mono** (400/500) für Labels und Pipeline-Beschriftungen. Self-hosted in `assets/fonts/`, Lizenz SIL OFL 1.1.
+- Enges Tracking auf großen Headlines. Kleine Texte nie unter 12 px.
+- Die App behält vorerst Inter (Scope-Regel unten).
 
 ## Anwendung
 

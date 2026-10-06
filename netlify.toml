@@ -1,2 +1,21 @@
 [build]
   publish = "."
+
+# The repo root is published as-is. Keep internal notes and working files off the public site.
+[[redirects]]
+  from = "/docs/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/Screenshots/*"
+  to = "/404.html"
+  status = 404
+  force = true

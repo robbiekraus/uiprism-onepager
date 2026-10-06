@@ -3,7 +3,8 @@
 Public one-pager, pitch deck and brand guide for **UIPrism** — built for the
 Vibe Coding Bootcamp Finaler Check-In.
 
-- `index.html` — the one-pager (deployed to https://uiprism.netlify.app)
+- `index.html` + `assets/` — the product page (deployed to https://uiprism.netlify.app). Static HTML/CSS, English, no third-party requests: fonts (IBM Plex, `assets/fonts/`), video (`assets/video/`, captions in `uiprism-walkthrough.en.vtt`), logo (`assets/brand/`).
+- `legal.html` — Imprint and privacy policy (EN translation + authoritative DE). Update whenever the site or the prototype changes what data it processes.
 - `deck.html` — the pitch deck **„Bauen im Blindflug"**, 12 slides
   (https://uiprism.netlify.app/deck.html).
   Claude-Design component (`.dc.html` format): `support.js` bootstraps React/Babel from unpkg,
