@@ -1,6 +1,6 @@
 # UIPrism Website: Research & Brainstorm (Gate 1)
 
-Stand: 06.10.2026 · Zweck: Rob wählt 3 Dinge (Abschnitt 8), danach läuft die Umsetzung ohne ihn durch.
+Stand: 06.10.2026 · Zweck: Rob wählt 4 Dinge (Abschnitt 8), danach läuft die Umsetzung ohne ihn durch.
 
 ## 1. Vorgaben (von Rob, verbindlich)
 
@@ -25,15 +25,13 @@ Stand: 06.10.2026 · Zweck: Rob wählt 3 Dinge (Abschnitt 8), danach läuft die 
 ## 3. Quellmaterial (Homepage-Repo `robert-kraus-website`, `v3/`)
 
 - Case Study `case-studies/uiprism.html`: ~300 Wörter, saubere Struktur Starting point, Approach, Result. Nennt einen echten Anlass (Baukostenmanagement-Plattform ohne Design-System).
-- Assets: `assets/video/uiprism-ablauf-poster.jpg` (neuer Startscreen), `assets/video/uiprism-ablauf-720p.mp4`, `assets/images/illustrations/ill-prism.webp` (neue Grafik), 7 Screens in `assets/images/case-uiprism/`.
+- **Entscheidung Rob (06.10.):** Von der Homepage übernehmen wir **nur drei Dinge**: den neuen **Video-Startscreen** (Poster), **Textbausteine** der Case Study und die **Prisma-Grafik**. Alles andere bleibt draußen: die 7 Screens in `case-uiprism/` und das Video selbst (es existiert schon als `uploads/UIPrism_Ablauf_720p.mp4`). Die App-Screens kommen weiter aus dem Prism-Repo (`Screenshots/`).
 
-### Eignung der neuen Assets (ehrliche Einschätzung)
-
-| Asset | Problem für "seriös" | Empfehlung |
+| Asset | Quelle | Umsetzung |
 |---|---|---|
-| **Poster** | Deutsche App-UI und deutsche Untertitel. Links ein angeschnittenes Finder-Fenster auf violettem Desktop, sichtbarer privater Dateiname ("Bildschirmfoto … 17.48.06", "Neuer Ordner"). Das Modal verdeckt den Hero-Text der App. | Übernehmen, aber neu aufnehmen: App im englischen UI, nur App-Fenster, kein Desktop, englische Untertitel. Der Moment (Import-Dialog mit Drop-Zone) ist richtig gewählt. |
-| **ill-prism.webp** | Bunter Regenbogen-Prisma-Körper im 3D-Look, wirkt wie ein Album-Cover, nicht wie Infrastruktur. Widerspricht auch der eigenen Brand-Regel "Spektrum nur sparsam". | Als kleines Motiv oder als Herkunft des Logos nutzen, nicht als Hero. Hero wird ein Pipeline-Diagramm (Abschnitt 4). |
-| **Screens (7)** | Echte App-Screens, gut. | Behalten. Erfundene Browser-URLs in den Rahmen entfernen. |
+| Video-Startscreen | `v3/assets/video/uiprism-ablauf-poster.jpg` | Wird als Poster des Videos eingesetzt. Beschnitt auf das App-Fenster (links ein Finder-Fenster auf violettem Desktop mit privatem Dateinamen, das fliegt raus). Offen: Die App im Bild und die Untertitel sind Deutsch. Das ist eine Inhaltsfrage des Videos selbst, nicht des Layouts (siehe Abschnitt 8, Punkt 4). |
+| Prisma-Grafik | `v3/assets/images/illustrations/ill-prism.webp` | Wird als zentrales Bildmotiv übernommen (Hero). Der Regenbogen ist kräftig. Seriosität muss deshalb die Umgebung leisten: ruhiger Hintergrund, strenges Raster, sonst keine Farbflächen, und das Spektrum kommt außerhalb dieser Grafik nicht mehr vor. |
+| Textbausteine | `v3/case-studies/uiprism.html` | Werden gekürzt, ins Englische der Seite überführt und in die Story eingebaut. Ohne Nutzer-Claims. |
 
 ## 4. Story-Linie: drei Varianten
 
@@ -96,6 +94,7 @@ Alle self-hosted (kein Google-Fonts-Aufruf, siehe Rechtliches).
 - Echte Produkt-Screens als Beweis, keine Maskottchen, keine Verlaufsflächen.
 - Mono-Schrift für Pipeline-Beschriftungen.
 - Ein dunkler Abschnitt (Pipeline) als Kontrast, sonst hell.
+- Die Prisma-Grafik ist das **einzige** farbige Bildmotiv der Seite.
 
 ## 6. Referenzen (Recherche)
 
@@ -126,6 +125,8 @@ Die Seite `uiprism.netlify.app/legal.html` existiert (HTTP 200), ist aber fehler
 2. **Logo:** L1 Reduktion (empfohlen), L2 oder L3?
 3. **Schrift:** T1 Plex (empfohlen), T2 oder T3?
 
+4. **Video-Sprache:** Das Walkthrough-Video und der Startscreen sind Deutsch (App-UI und Untertitel), die Seite wird Englisch. Optionen: (a) so lassen und in der Bildunterschrift "German UI" kennzeichnen, (b) Untertitel auf Englisch nachziehen, (c) Video später neu aufnehmen. Empfehlung: (a) zum Start, (b) danach.
+
 Alles andere entscheide ich nach den Empfehlungen oben. Antwort "alles wie empfohlen" reicht.
 
 ## 9. Ablauf nach Gate 1
@@ -139,4 +140,4 @@ Alles andere entscheide ich nach den Empfehlungen oben. Antwort "alles wie empfo
 | 5 | Visueller Check im Browser (Desktop + Mobil), Kontrast, Lighthouse | Sonnet, Review Opus |
 | 6 | Gate 2: Rob nimmt ab, dann Merge nach `main` (Netlify deployt automatisch) | Rob |
 
-Rob muss neu aufnehmen oder liefern: das **englische Walkthrough-Video** (Abschnitt 3).
+Von Rob nötig: nichts, außer der Entscheidung zu Punkt 4 unten.
