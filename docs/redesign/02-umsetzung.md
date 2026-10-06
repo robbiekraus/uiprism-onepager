@@ -33,3 +33,11 @@ Die Case Study sagt "cross-references every element with the connected repositor
 - **Video:** App-UI im Video bleibt Deutsch (Hinweis steht unter dem Player).
 - Die 3 Hero-Aussagen und der Pipeline-Text sind knapp gehalten. Zahlen und Nutzer-Claims gibt es bewusst nicht.
 - Logo: die Marke ist ein Vorschlag (Kontur-Prisma). Wortmarke ist Live-Text, kein Outline-SVG.
+
+## Runde 2 (06.10., Rückmeldung Rob)
+
+- **Logo:** App-Icon statt freier Marke: schwarzes Quadrat mit Rundung, Prisma mit Strahlen. Vier Varianten (Schwarz-Blau, Schwarz-Weiß, hell, Indigo-Farbicon), Favicon und Apple-Touch daraus.
+- **Problem-Text** neu geschrieben nach UX-Copy-Skill. Material: Positionierungsdokument (`designbridge/docs/2026-07-14-naming-positionierung.md`: "Einbahnstraße", Lücke Quelle -> Library -> Figma UND Code), Pitch-Deck Folie "Der Fall" (Wildwuchs, Anforderungen ohne Design ins Development) und der Anlass aus der Case Study. Keine Zwischenüberschriften, die die Hauptüberschrift wiederholen. Der Satz "Few keep both sides on the same components" ist bewusst weich formuliert, weil die Wettbewerbsrecherche vom 14.07. stammt und nicht neu geprüft wurde.
+- **Video-Startscreen** wie auf der Homepage: Titel, Play-Knopf, Prisma-Grafik, blendet beim Start aus (`assets/site.js`).
+- **Screens:** sechs große Bilder statt eines kleinen, in vier Reihen (Tokens, Komponenten, Figma, Storybook), jedes mit Vorschau-Popup nach dem Schema der Homepage (Klick, Esc, Schließen-Knopf, Fokus kehrt zurück). Quellen: zwei App-Screenshots, vier Standbilder aus dem Walkthrough (Figma, Storybook). Die Standbilder sind 1280 px breit, das ist die Auflösung des Videos. Bessere Auflösung nur mit neuen Screenshots.
+- **About:** kleines rundes Porträt (56 px) neben der Überschrift. Auf der neuen Seite gab es vorher keins. Wenn gar keins gewünscht ist: Zeile mit `class="who"` in `index.html` auf die Überschrift reduzieren.

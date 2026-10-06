@@ -4,7 +4,7 @@ Leichtgewichtiges Brand-System, damit Deck, One-Pager und App-Optik aus einem Gu
 
 ## ✅ Festgelegt (verbindlich)
 - **Name:** UIPrism — gesetzt.
-- **Logo (Stand 06.10.2026):** Marke `assets/brand/uiprism-mark.svg` — Prisma als Kontur, ein einfallender Strahl, vier gebrochene Strahlen in Indigo-Abstufungen. Wortmarke „UI" Ink + „Prism" Indigo in Plex Sans 600. Dunkle Variante `uiprism-mark-onDark.svg`. Ersetzt die frühere Spektrum-Marke.
+- **Logo (Stand 06.10.2026, v2):** App-Icon = schwarzes Quadrat mit abgerundeten Ecken, darin das Prisma (weiße Kontur) mit einfallendem Strahl und vier gebrochenen Strahlen. Varianten in `assets/brand/`: `uiprism-appicon.svg` (Schwarz-Blau, Hauptversion), `-bw.svg` (Schwarz-Weiß), `-light.svg` (weißes Quadrat), `-color.svg` (Indigo-Farbicon). Favicon, Apple-Touch- und 512-px-Icon sind daraus abgeleitet (`_appicon-square.svg` = Quelle ohne Rundung). Wortmarke „UI" Ink + „Prism" Indigo in Plex Sans 600. Ersetzt die Kontur-Marke v1 und die frühere Spektrum-Marke.
 - **Art-Direction-Richtung:** A · „Clarity" (hell, freundlich, SaaS; Indigo-Akzent, Spektrum sparsam) — gewählt.
 - **Tagline:** Map your UI, automatically.
 - **Sprecher:** Robert Kraus.

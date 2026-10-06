@@ -14,10 +14,12 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#fafaf9">
 <link rel="icon" href="assets/brand/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/brand/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/ibm-plex-sans-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/styles.css">
+<script src="assets/site.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -25,13 +27,14 @@
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="UIPrism, back to top">
-      <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 8 56 52H8Z" fill="none" stroke="#141418" stroke-width="4" stroke-linejoin="round"/><path d="M1.5 44 17.2 36.3" stroke="#141418" stroke-width="3.2" stroke-linecap="round" fill="none"/><path d="M17.2 36.3 47.6 38.4" stroke="#4F46E5" stroke-width="2.4" stroke-linecap="round" fill="none" opacity=".55"/><g stroke-width="3" stroke-linecap="round" fill="none"><path d="M48 38.2 60 21.5" stroke="#4F46E5"/><path d="M48.3 38.6 61 30.2" stroke="#6366F1"/><path d="M48.5 39 61.2 39.6" stroke="#818CF8"/><path d="M48.4 39.4 60 48.6" stroke="#A5B4FC"/></g></svg>
+      <svg viewBox="0 0 128 128" aria-hidden="true"><rect x="0" y="0" width="128" height="128" rx="28" fill="#141418"/><g transform="translate(12.4 14.5) scale(1.65)"><path d="M32 8 56 52H8Z" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round"/><path d="M1.5 44 17.2 36.3" stroke="#FFFFFF" stroke-width="3.2" stroke-linecap="round" fill="none"/><path d="M17.2 36.3 47.6 38.4" stroke="#818CF8" stroke-width="2.4" stroke-linecap="round" fill="none" opacity="0.9"/><g stroke-width="3" stroke-linecap="round" fill="none"><path d="M48 38.2 60 21.5" stroke="#C7D2FE"/><path d="M48.3 38.6 61 30.2" stroke="#A5B4FC"/><path d="M48.5 39 61.2 39.6" stroke="#818CF8"/><path d="M48.4 39.4 60 48.6" stroke="#6366F1"/></g></g></svg>
       <span>UI<b>Prism</b></span>
     </a>
     <nav class="nav" aria-label="Main">
       <a href="#problem">Problem</a>
       <a href="#pipeline">Pipeline</a>
       <a href="#walkthrough">Walkthrough</a>
+      <a href="#interface">Interface</a>
       <a href="#status">Status</a>
       <a class="btn" href="https://designbridge-production.up.railway.app/" rel="noopener">Open prototype</a>
     </nav>
@@ -62,23 +65,24 @@
     <div class="wrap">
       <div class="head">
         <p class="label">The problem</p>
-        <h2 id="h-problem">Source material arrives in every shape. Translating it is manual work.</h2>
+        <h2 id="h-problem">A grown product has no system. Building one afterwards is manual work.</h2>
       </div>
-      <div class="cols3">
+      <p class="lead">In a product that has grown for years, every feature has its own handwriting. Requirements went straight from stakeholders into development, with no design in between. Now design is asked to clean it up.</p>
+      <dl class="issues">
         <div>
-          <h3>Every shape</h3>
-          <p>Wireframes from stakeholders, screenshots of existing features, whole pages from running software, or just a URL.</p>
+          <dt>The reference is the running product.</dt>
+          <dd>Screenshots, pages, sometimes only a URL. Someone redraws each screen as components in Figma, element by element.</dd>
         </div>
         <div>
-          <h3>Rebuilt by hand</h3>
-          <p>Someone translates each source into design-system components, element by element. Each rebuild drifts a little from the last.</p>
+          <dt>Figma and code each hold half of the system.</dt>
+          <dd>Neither is a reliable source for the other, so they drift apart without anyone noticing.</dd>
         </div>
         <div>
-          <h3>Drift without a signal</h3>
-          <p>Design file and code move apart quietly. The gap shows up late, when it is expensive to close.</p>
+          <dt>Converters only go one way.</dt>
+          <dd>Most tools move a design into Figma or out of it. Few keep both sides on the same components.</dd>
         </div>
-      </div>
-      <p class="origin">The gap kept coming up across teams, most recently at a cost-management platform for the construction industry that had its own software and no design system.</p>
+      </dl>
+      <p class="origin">The gap kept coming up across teams, most recently at a cost-management platform for the construction industry with its own software and no design system.</p>
     </div>
   </section>
 
@@ -92,7 +96,7 @@
         <article class="step">
           <span class="num">01 · READ</span>
           <h3>Break the source down</h3>
-          <p>The AI extracts design tokens (colors, typography, spacing, radius, shadows) and detects UI components, grouped as atoms, molecules, organisms and templates. Every value carries a confidence level.</p>
+          <p>The AI extracts design tokens (colors, typography, spacing, radius, shadows) and detects UI components, grouped as atoms, molecules, organisms and templates.</p>
           <ul class="chips" aria-label="Input sources">
             <li class="chip live">Screenshot <i>· available</i></li>
             <li class="chip">URL <i>· preview</i></li>
@@ -122,28 +126,79 @@
   <section id="walkthrough" class="walk" aria-labelledby="h-walk">
     <div class="wrap">
       <div class="head">
-        <p class="label">Walkthrough · 2 min</p>
-        <h2 id="h-walk">From screenshot to Figma, code and Storybook.</h2>
+        <p class="label">Walkthrough</p>
+        <h2 id="h-walk">Watch an import from start to finish.</h2>
       </div>
       <div class="player">
-        <video controls preload="metadata" playsinline width="1280" height="608" poster="assets/video/uiprism-walkthrough-poster.jpg">
+        <video controls preload="metadata" playsinline width="1280" height="608" id="walk-video" aria-label="Walkthrough: a screenshot imported into UIPrism, analyzed, and written to Figma and Storybook">
           <source src="assets/video/uiprism-walkthrough.mp4" type="video/mp4">
           <track kind="captions" src="assets/video/uiprism-walkthrough.en.vtt" srclang="en" label="English" default>
           Your browser cannot play this video. <a href="assets/video/uiprism-walkthrough.mp4">Download the walkthrough</a>.
         </video>
+        <button type="button" class="start" id="walk-start" aria-label="Play walkthrough, 2 minutes">
+          <span class="start-text">
+            <span class="start-eyebrow">2 min · captions on</span>
+            <span class="start-title">From screenshot to Figma</span>
+            <span class="start-play" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+          </span>
+          <img src="assets/img/prism.webp" alt="" aria-hidden="true" width="723" height="481" decoding="async">
+        </button>
       </div>
-      <p class="cap">The recording has no audio; captions are on by default. It was made with an earlier build whose interface was still in German. A new recording with the current interface is planned.</p>
+      <p class="cap">The recording has no audio, so captions are on by default. It was made with an earlier build whose interface was still in German. A new recording with the current interface is planned.</p>
+    </div>
+  </section>
 
-      <div class="proof">
-        <figure>
-          <img src="assets/img/tokens.jpg" width="1440" height="575" alt="Token view of the UIPrism prototype: extracted colors with hex values and High confidence labels, and the start of the typography list.">
-          <figcaption class="cap">Token view of the prototype. Each extracted value is listed with its name and a confidence label.</figcaption>
-        </figure>
-        <div>
-          <h3>Every value carries a confidence level.</h3>
-          <p>Extracted colors, type sizes and spacing values are labeled High, Medium or Low. Reviewers see what to check first instead of auditing everything.</p>
-        </div>
+  <section id="interface" aria-labelledby="h-interface">
+    <div class="wrap">
+      <div class="head">
+        <p class="label">The interface</p>
+        <h2 id="h-interface">Inside the prototype.</h2>
       </div>
+      <div class="rows">
+        <article class="row">
+          <div class="row-text">
+            <p class="label">01 · Read</p>
+            <h3>Tokens, each with a confidence level</h3>
+            <p>Colors, typography, spacing, radius and shadows are extracted from the source. High, Medium or Low shows what to check first.</p>
+          </div>
+          <div class="row-shots one">
+            <figure><button type="button" class="shot" data-shot><img src="assets/img/screens/01-tokens.jpg" width="1240" height="575" alt="Token view: extracted colors with hex values and High confidence labels, and the start of the typography list."></button><figcaption>Token view</figcaption></figure>
+          </div>
+        </article>
+        <article class="row">
+          <div class="row-text">
+            <p class="label">02 · Match</p>
+            <h3>Components mapped to shadcn/ui</h3>
+            <p>Detected components are grouped as atoms, molecules, organisms and templates. Each one shows its mapping, its confidence and a live preview.</p>
+          </div>
+          <div class="row-shots one">
+            <figure><button type="button" class="shot" data-shot><img src="assets/img/screens/02-components.jpg" width="1914" height="1196" alt="Component list with confidence labels and shadcn/ui badges, one entry expanded to show a rendered line chart card."></button><figcaption>Component list with preview</figcaption></figure>
+          </div>
+        </article>
+        <article class="row wide">
+          <div class="row-text">
+            <p class="label">03 · Write to Figma</p>
+            <h3>Components and styles in the Figma file</h3>
+            <p>The plugin writes components, text styles and color styles into the file, then assembles the dashboard template from them.</p>
+          </div>
+          <div class="row-shots two">
+            <figure><button type="button" class="shot" data-shot><img src="assets/img/screens/03-figma-library.jpg" width="1280" height="608" alt="Figma file with the UIPrism plugin open next to a library of components such as badge, input and card."></button><figcaption>Component library</figcaption></figure>
+            <figure><button type="button" class="shot" data-shot><img src="assets/img/screens/04-figma-template.jpg" width="1280" height="608" alt="Figma canvas with the assembled dashboard template and its layer tree."></button><figcaption>Assembled template</figcaption></figure>
+          </div>
+        </article>
+        <article class="row wide">
+          <div class="row-text">
+            <p class="label">03 · Write to Storybook</p>
+            <h3>Every component in Storybook</h3>
+            <p>A live preview lists all detected components with their variants and controls, up to the finished template.</p>
+          </div>
+          <div class="row-shots two">
+            <figure><button type="button" class="shot" data-shot><img src="assets/img/screens/05-storybook-controls.jpg" width="1280" height="536" alt="Storybook with atoms, organisms and a controls panel for the primary button variant."></button><figcaption>Variants and controls</figcaption></figure>
+            <figure><button type="button" class="shot" data-shot><img src="assets/img/screens/06-storybook-template.jpg" width="1280" height="536" alt="Storybook rendering the finished dashboard template."></button><figcaption>Finished template</figcaption></figure>
+          </div>
+        </article>
+      </div>
+      <p class="cap">Select an image to enlarge it. Screens come from the prototype and the walkthrough recording.</p>
     </div>
   </section>
 
@@ -189,7 +244,7 @@
     <div class="wrap"><div class="about">
       <div>
         <p class="label">About</p>
-        <h2 id="h-about">Built by Robert Kraus.</h2>
+        <div class="who"><img src="assets/img/robert.jpg" width="72" height="72" alt="Portrait of Robert Kraus"><h2 id="h-about">Built by Robert Kraus.</h2></div>
         <p>Senior UX/UI designer in Munich. Works with design systems in software for real estate and construction management, automotive and medical technology. UIPrism started from that daily work: the translation between source material and design system.</p>
       </div>
       <ul class="links">
