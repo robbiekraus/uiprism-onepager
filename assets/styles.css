@@ -106,7 +106,7 @@ section{padding:clamp(56px,8vw,104px) 0}
 #about{padding-top:0}
 .about{border-top:1px solid var(--line);padding-top:clamp(40px,6vw,72px);display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(24px,5vw,72px)}
 .about p{color:var(--ink-2);max-width:36em}
-.about h2{margin:16px 0 18px}
+.about h2{margin:16px 0 14px;font-size:22px;font-weight:500;letter-spacing:-.01em;line-height:1.3;max-width:none}
 .links{list-style:none;margin:0;padding:0;display:grid;gap:0;align-content:start}
 .links li{border-top:1px solid var(--line)}
 .links li:last-child{border-bottom:1px solid var(--line)}
@@ -196,10 +196,6 @@ footer a:hover{color:var(--accent)}
 html.lightbox-open{overflow:hidden}
 @media (prefers-reduced-motion:reduce){.lightbox,.lightbox img{transition:none}}
 
-/* about: small portrait, no personality cult */
-.who{display:flex;align-items:center;gap:16px;margin:16px 0 18px}
-.who img{width:56px;height:56px;border-radius:50%;object-fit:cover;flex:none;border:1px solid var(--line)}
-.who h2{margin:0;max-width:none}
 
 @media (max-width:900px){
   .issues>div{grid-template-columns:1fr;gap:6px}
