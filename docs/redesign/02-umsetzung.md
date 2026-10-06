@@ -19,7 +19,7 @@ Die Case Study sagt "cross-references every element with the connected repositor
 ## Rechtliches: bitte vor Veröffentlichung gegenlesen
 
 1. **KI-Anbieter ist Gemini, nicht Anthropic.** `GET /api/health` auf Prod meldet `ai_provider: gemini`. Der Text nennt Google/Gemini und das kostenlose Kontingent (laut Gemini-Spec). Falls der Key inzwischen ein bezahlter ist, ändert sich der Satz zur Nutzung durch Google.
-2. **Aussage zu Googles Bedingungen** (Inhalte im kostenlosen Kontingent dürfen zur Produktverbesserung genutzt und von Menschen geprüft werden) ist nach meinem Kenntnisstand korrekt, aber nicht live nachgeprüft.
+2. **Aussage zu Googles Bedingungen** (07.10.: auf Robs Hinweis auf die kostenpflichtige Stufe umgestellt: kein Training mit den Inhalten, zeitlich begrenzte Speicherung zur Missbrauchserkennung) ist nach meinem Kenntnisstand korrekt, aber nicht live nachgeprüft.
 3. **Netlify:** Speicherdauer der Logs steht bewusst nicht drin (unbekannt). Drittlandübermittlung: DPF oder Standardvertragsklauseln, nicht verifiziert.
 4. **Railway-Entität und Adresse** nicht genannt (nicht verifiziert).
 5. **Die App lädt Google Fonts (Inter)** (`web/index.html` im Produkt-Repo). Das steht im Prototyp-Abschnitt. Sauberer: Inter dort self-hosten, dann entfällt der Absatz. Nicht angefasst (anderes Repo).
