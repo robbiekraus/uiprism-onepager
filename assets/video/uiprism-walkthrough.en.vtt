@@ -1,73 +1,70 @@
 WEBVTT
 
-00:00.800 --> 00:04.200
-UIPrism takes a screenshot, URL, repo or Figma file as input
-
-00:04.700 --> 00:07.800
+00:00.000 --> 00:02.700
 The starting point is a screenshot of an existing interface
 
-00:09.400 --> 00:13.400
+00:04.300 --> 00:08.300
 Here: a finished sustainability dashboard
 
-00:14.300 --> 00:18.200
+00:09.200 --> 00:13.100
 Import by drag and drop
 
-00:19.000 --> 00:22.400
+00:13.900 --> 00:17.300
 The AI reads out colors, typography, spacing and components
 
-00:22.900 --> 00:25.600
+00:17.800 --> 00:20.500
 Import complete: 23 tokens, 19 components
 
-00:26.100 --> 00:30.000
+00:21.000 --> 00:24.900
 The tokens: colors, typography, spacing, radius, shadows
 
-00:30.500 --> 00:34.300
+00:25.400 --> 00:29.200
 Then the components, atoms first
 
-00:34.900 --> 00:39.000
+00:29.800 --> 00:33.900
 Each component with its origin in the layout and its mapping to shadcn/ui
 
-00:39.600 --> 00:43.600
+00:34.500 --> 00:38.500
 Preview directly in the list
 
-00:44.200 --> 00:47.600
+00:39.100 --> 00:42.500
 Atoms, molecules, organisms, templates
 
-00:48.000 --> 00:50.000
+00:42.900 --> 00:44.900
 … with ready-to-use JSX code
 
-00:50.500 --> 00:54.200
+00:45.400 --> 00:49.100
 Targets: Figma, Storybook or the whole library
 
-00:54.700 --> 00:58.200
+00:49.600 --> 00:53.100
 An empty Figma file, plus the UIPrism plugin
 
-00:58.700 --> 01:03.100
+00:53.600 --> 00:58.000
 Scan and export: color and text styles are created
 
-01:03.600 --> 01:08.800
+00:58.500 --> 01:03.700
 The components are created directly in the file
 
-01:09.300 --> 01:14.900
+01:04.200 --> 01:09.800
 Atoms, molecules and organisms as real Figma components
 
-01:15.400 --> 01:20.900
+01:10.300 --> 01:15.800
 … and assemble into the dashboard layout
 
-01:21.400 --> 01:27.900
+01:16.300 --> 01:22.800
 Done: 10 colors, 5 text styles, 19 components, 1 template
 
-01:28.700 --> 01:31.900
+01:23.600 --> 01:26.800
 One click: “Open in Storybook”
 
-01:32.400 --> 01:36.900
+01:27.300 --> 01:31.800
 Storybook with all detected components
 
-01:37.400 --> 01:42.600
+01:32.300 --> 01:37.500
 Every component with variants and controls
 
-01:43.200 --> 01:49.800
+01:38.100 --> 01:44.700
 Up to the finished dashboard template in the browser
 
-01:50.100 --> 01:55.800
+01:45.000 --> 01:50.700
 One screenshot → design tokens, code, Figma library and Storybook
