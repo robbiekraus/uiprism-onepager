@@ -92,10 +92,10 @@
         <h2 id="h-pipeline">One pipeline from source to system.</h2>
       </div>
       <div class="rows">
-        <article class="row">
+        <article class="row wide">
           <div class="row-text">
-            <p class="num">01 · READ</p>
-            <h3>Break the source down</h3>
+            <p class="num">01 · READ AND MATCH</p>
+            <h3>Break the source down, map it to a design system</h3>
             <p>The AI extracts design tokens (colors, typography, spacing, radius, shadows) and detects UI components, grouped as atoms, molecules, organisms and templates. Every value carries a confidence level, High, Medium or Low, so reviewers see what to check first.</p>
             <ul class="chips" aria-label="Input sources">
               <li class="chip live">Screenshot <i>· available</i></li>
@@ -103,24 +103,16 @@
               <li class="chip">Repository <i>· preview</i></li>
               <li class="chip">Figma file <i>· via plugin</i></li>
             </ul>
-          </div>
-          <div class="row-shots one">
-            <figure><button type="button" class="shot" data-shot><img src="assets/img/screens/01-tokens.jpg" width="1240" height="575" alt="Token view: extracted colors with hex values and High confidence labels, and the start of the typography list."></button><figcaption>Token view</figcaption></figure>
-          </div>
-        </article>
-        <article class="row">
-          <div class="row-text">
-            <p class="num">02 · MATCH</p>
-            <h3>Map to a design system</h3>
             <p>Each detected component is resolved against a component catalog instead of being redrawn freehand. Today that catalog is shadcn/ui with Tailwind, so Figma components and code components share one vocabulary. Using your own repository as the catalog is the next step.</p>
           </div>
-          <div class="row-shots one">
+          <div class="row-shots two even">
+            <figure><button type="button" class="shot" data-shot><img src="assets/img/screens/01-tokens.jpg" width="1240" height="575" alt="Token view: extracted colors with hex values and High confidence labels, and the start of the typography list."></button><figcaption>Token view</figcaption></figure>
             <figure><button type="button" class="shot" data-shot><img src="assets/img/screens/02-components.jpg" width="1914" height="1196" alt="Component list with confidence labels and shadcn/ui badges, one entry expanded to show a rendered line chart card."></button><figcaption>Component list with preview</figcaption></figure>
           </div>
         </article>
         <article class="row wide">
           <div class="row-text">
-            <p class="num">03 · WRITE</p>
+            <p class="num">02 · WRITE</p>
             <h3>Write it where teams work</h3>
             <p><strong>Figma:</strong> components, text styles and color styles, written by the UIPrism plugin. <strong>Code:</strong> JSX components and a <code>tokens.css</code> file to download. <strong>Storybook:</strong> a live preview with all detected components, their variants and controls.</p>
           </div>

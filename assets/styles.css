@@ -204,3 +204,4 @@ html.lightbox-open{overflow:hidden}
   .row{grid-template-columns:1fr}
 }
 @media (max-width:560px){.row-shots.two{grid-template-columns:1fr}}
+.chips+p{margin-top:20px}
