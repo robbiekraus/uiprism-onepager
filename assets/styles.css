@@ -184,6 +184,8 @@ footer a:hover{color:var(--accent)}
 .shot{display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:var(--radius);background:#fff;overflow:hidden;cursor:zoom-in;line-height:0}
 .shot img{width:100%;height:auto;transition:transform .35s ease}
 .shot:hover img{transform:scale(1.015)}
+.row-shots.even .shot{aspect-ratio:16/10}
+.row-shots.even .shot img{height:100%;object-fit:cover;object-position:top left}
 .shot:focus-visible{outline:3px solid var(--accent-fill);outline-offset:3px}
 @media (prefers-reduced-motion:reduce){.shot img{transition:none}}
 .lightbox{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:clamp(12px,3vw,40px);background:rgba(14,14,17,.86);cursor:zoom-out;opacity:0;transition:opacity .25s ease}
